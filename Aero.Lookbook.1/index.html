@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aéropostale: We Are Obsessed</title>
+<!-- Gotham via Rire's Adobe Fonts web project "interact-responsive (Gotham)" -->
+<link rel="stylesheet" href="https://use.typekit.net/sza7zys.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; background: #fff; }
+  body { font-family: "gotham", Helvetica, Arial, sans-serif; color: #222; -webkit-font-smoothing: antialiased; }
+  @media (min-width: 900px) { html, body { background: #f4f4f2; } body { padding: 40px 24px; } }
+
+  .lookbook { container-type: inline-size; width: 100%; max-width: 960px; margin: 0 auto; padding: 0 0 20px; }
+  @media (min-width: 900px) { .lookbook { background: #fff; padding: 24px 24px 18px; box-shadow: 0 2px 24px rgba(0,0,0,.08); } }
+
+  /* Phone: the opening title image sits on top as a banner */
+  .opening { display: block; width: 100%; height: auto; aspect-ratio: 790 / 475; object-fit: cover; }
+
+  .stage { position: relative; margin-top: 14px; }
+  .track {
+    display: grid; grid-auto-flow: column; grid-auto-columns: 84%; gap: 12px;
+    overflow-x: auto; overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory; scroll-behavior: smooth;
+    padding: 0 16px; scroll-padding: 0 16px; scrollbar-width: none;
+  }
+  .track::-webkit-scrollbar { display: none; }
+
+  .look { scroll-snap-align: start; margin: 0; }
+  .look.is-opening { display: none; }
+
+  /* Phone card: a tall window onto the spread. Tap pans between the close-up and the full look */
+  .photo { position: relative; aspect-ratio: 2 / 3; overflow: hidden; background: #dfe6d5; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: var(--close) 50%; transition: object-position .6s ease; display: block; }
+  .look.is-full .photo img { object-position: var(--full) 50%; }
+  .photo:focus-visible { outline: 3px solid #111; outline-offset: 2px; }
+  .swap { position: absolute; right: 10px; bottom: 10px; display: flex; align-items: center; gap: 6px; padding: 7px 11px; border-radius: 999px; background: rgba(255,255,255,.92); font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; box-shadow: 0 1px 4px rgba(0,0,0,.18); pointer-events: none; }
+
+  .copy { padding: 14px 2px 0; }
+  .copy h2 { margin: 0 0 6px; font-weight: 400; font-size: 20px; letter-spacing: .06em; text-transform: uppercase; line-height: 1.1; }
+  .copy p { margin: 0; font-size: 14px; line-height: 1.45; color: #444; }
+
+  .dots { display: flex; justify-content: center; gap: 8px; padding-top: 14px; }
+  .dots button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 50%; background: #b5b5b5; cursor: pointer; }
+  .dots button[aria-current="true"] { background: #111; width: 22px; border-radius: 4px; }
+
+  .arrow { display: none; position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border: 0; border-radius: 50%; background: rgba(255,255,255,.92); color: #111; font-size: 22px; cursor: pointer; box-shadow: 0 1px 6px rgba(0,0,0,.2); z-index: 2; }
+  .arrow.prev { left: 10px; } .arrow.next { right: 10px; }
+
+  .credit { text-align: center; font-size: 11px; color: #888; margin: 16px 16px 0; }
+
+  /* Tablet and desktop: the original spreads, one at a time, with the copy set live where it sat */
+  @container (min-width: 700px) {
+    .opening { display: none; }
+    .stage { margin-top: 0; }
+    .track { grid-auto-columns: 100%; gap: 0; padding: 0; scroll-padding: 0; }
+    .look.is-opening { display: block; }
+    .photo { aspect-ratio: 790 / 475; cursor: default; }
+    .photo img, .look.is-full .photo img { object-position: 50% 50%; transition: none; }
+    .swap { display: none; }
+    .look { position: relative; }
+    .copy { position: absolute; left: var(--x); top: var(--y); width: var(--w); padding: 0; }
+    .copy h2 { font-size: 2.35cqi; margin-bottom: .5cqi; letter-spacing: .07em; color: #222; }
+    .copy p { font-size: 1.4cqi; line-height: 1.5; color: #333; }
+    .arrow { display: block; top: calc(50% - 14px); }
+    .dots { padding-top: 12px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .track { scroll-behavior: auto; } .photo img { transition: none; } }
+</style>
+</head>
+<body>
+<section class="lookbook" aria-label="Aéropostale We Are Obsessed lookbook">
+  <img class="opening" src="img/g_opening.jpg" alt="We Are Obsessed: four looks from the Aéropostale spring lookbook">
+  <div class="stage">
+    <button class="arrow prev" aria-label="Previous look">&#8249;</button>
+    <div class="track" id="track"></div>
+    <button class="arrow next" aria-label="Next look">&#8250;</button>
+    <div class="dots" id="dots" aria-label="Choose a look"></div>
+  </div>
+  <p class="credit">Portfolio piece by Rire Design. Originally designed and built for Aéropostale.</p>
+</section>
+
+<script>
+  // close/full: where the phone window sits on each spread (0% = left edge, 100% = right edge)
+  // x/y/w: where the copy sat on the original desktop spread
+  const looks = [
+    { img: "g1", title: "#TBT", body: "Make for the perf throwback in a kaleidoscope tank and high waisted shorts.", close: 81, full: 0, x: 35.4, y: 41.5, w: 25 },
+    { img: "g2", title: "Pink Flamingos", body: "Mix bright basics with playful prints for the ultimate #OOTD.", close: 10, full: 100, x: 48.1, y: 42.6, w: 18.5 },
+    { img: "g3", title: "Insta-Glam", body: "Go prints charming with a #selfie ready dress and combat boots.", close: 100, full: 0, x: 29.5, y: 24.2, w: 32 },
+    { img: "g4", title: "The Long &amp; Short of It", body: "Beat in-between weather with long sleeves, bare legs and fierce florals.", close: 15, full: 100, x: 51, y: 21.3, w: 23 },
+    { img: "g5", title: "The Weekender", body: "Lounge pretty in nautical stripes and sporty-chic sweats.", close: 82, full: 2, x: 39.2, y: 60, w: 27 },
+    { img: "g6", title: "Print Party", body: "Convert classic to cool with a bold tank on black skinnies.", close: 14, full: 100, x: 50.6, y: 37.6, w: 22 },
+    { img: "g7", title: "Electric Youth", body: "Get flirty in a statement-making blue dress and t-strap flats.", close: 89, full: 0, x: 34.5, y: 31.8, w: 26 }
+  ];
+
+  const track = document.getElementById("track");
+  const dots = document.getElementById("dots");
+  const strip = s => s.replace(/&amp;/g, "&");
+
+  // Opening spread: shown in the slider on wider screens, as a banner above on phones
+  const open = document.createElement("figure");
+  open.className = "look is-opening";
+  open.innerHTML = '<div class="photo"><img src="img/g_opening.jpg" alt="We Are Obsessed: four looks from the Aéropostale spring lookbook"></div>';
+  track.appendChild(open);
+
+  looks.forEach(l => {
+    const fig = document.createElement("figure");
+    fig.className = "look";
+    fig.style.cssText = `--close:${l.close}%;--full:${l.full}%;--x:${l.x}%;--y:${l.y}%;--w:${l.w}%`;
+    fig.innerHTML =
+      `<div class="photo" role="button" tabindex="0" aria-pressed="false" aria-label="${strip(l.title)}: show the full look">` +
+        `<img src="img/${l.img}.jpg" alt="${strip(l.title)} look" loading="lazy">` +
+        `<span class="swap" aria-hidden="true">&#8644; Full look</span>` +
+      `</div>` +
+      `<figcaption class="copy"><h2>${l.title}</h2><p>${l.body}</p></figcaption>`;
+    const photo = fig.querySelector(".photo");
+    const label = fig.querySelector(".swap");
+    const flip = () => {
+      if (track.clientWidth >= 700) return;
+      const on = fig.classList.toggle("is-full");
+      photo.setAttribute("aria-pressed", on);
+      label.innerHTML = on ? "&#8644; Close-up" : "&#8644; Full look";
+    };
+    photo.addEventListener("click", flip);
+    photo.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); flip(); } });
+    track.appendChild(fig);
+  });
+
+  const visible = () => [...track.children].filter(c => c.offsetParent !== null);
+  function current() {
+    const v = visible(); if (!v.length) return 0;
+    const step = v.length > 1 ? v[1].offsetLeft - v[0].offsetLeft : 1;
+    return Math.min(v.length - 1, Math.max(0, Math.round((track.scrollLeft) / step)));
+  }
+  function goTo(i) {
+    const v = visible(); const n = v.length;
+    i = (i + n) % n;
+    track.scrollTo({ left: v[i].offsetLeft - v[0].offsetLeft, behavior: "smooth" });
+  }
+  function buildDots() {
+    dots.innerHTML = "";
+    visible().forEach((_, i) => {
+      const b = document.createElement("button");
+      b.setAttribute("aria-label", "Look " + (i + 1));
+      b.addEventListener("click", () => goTo(i));
+      dots.appendChild(b);
+    });
+    sync();
+  }
+  function sync() { const p = current(); [...dots.children].forEach((d, i) => d.setAttribute("aria-current", i === p)); }
+
+  document.querySelector(".arrow.prev").addEventListener("click", () => goTo(current() - 1));
+  document.querySelector(".arrow.next").addEventListener("click", () => goTo(current() + 1));
+  track.addEventListener("scroll", () => requestAnimationFrame(sync), { passive: true });
+  new ResizeObserver(buildDots).observe(track);
+  document.addEventListener("keydown", e => { if (e.key === "ArrowRight") goTo(current() + 1); if (e.key === "ArrowLeft") goTo(current() - 1); });
+
+  const report = () => parent !== window && parent.postMessage({ type: "lookbook-height", height: document.documentElement.scrollHeight }, "*");
+  new ResizeObserver(report).observe(document.body);
+</script>
+</body>
+</html>
