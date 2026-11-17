@@ -8,5 +8,6 @@ The original desktop-era versions live in [rirenakpodia/interact](https://github
 |---|---|---|
 | Aéropostale Shorts (Girls) | [interact/Aero_Shorts_Girls](https://rirenakpodia.github.io/interact/Aero_Shorts_Girls/) | [interact-responsive/Aero_Shorts_Girls](https://rirenakpodia.github.io/interact-responsive/Aero_Shorts_Girls/) |
 | Aéropostale "We Are Obsessed" Lookbook | [interact/Aero.Lookbook.1](https://rirenakpodia.github.io/interact/Aero.Lookbook.1/) | [interact-responsive/Aero.Lookbook.1](https://rirenakpodia.github.io/interact-responsive/Aero.Lookbook.1/) |
+| Aéropostale Bethany Mota Collection launch | [interact/Aero.Lookbook.2](https://rirenakpodia.github.io/interact/Aero.Lookbook.2/) | [interact-responsive/Aero.Lookbook.2](https://rirenakpodia.github.io/interact-responsive/Aero.Lookbook.2/) |
 
 Images in the rebuilds were AI upscaled (Real-ESRGAN) from the original web assets. Where copy was baked into an image, it was removed and reset as live text.
