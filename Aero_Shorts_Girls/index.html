@@ -4,14 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Aéropostale Shorts</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;800;900&display=swap" rel="stylesheet">
+<!-- Gotham via Rire's Adobe Fonts web project "interact-responsive (Gotham)" -->
+<link rel="stylesheet" href="https://use.typekit.net/sza7zys.css">
 <style>
   *, *::before, *::after { box-sizing: border-box; }
   html, body { margin: 0; background: #e1e1e1; }
   @media (min-width: 900px) { html, body { background: #f4f4f2; } body { padding: 40px 24px; } }
-  body { font-family: "Gotham", Montserrat, Helvetica, Arial, sans-serif; color: #111; -webkit-font-smoothing: antialiased; }
+  body { font-family: "gotham", Helvetica, Arial, sans-serif; color: #111; -webkit-font-smoothing: antialiased; }
 
   /* Sizes off the container, not the window, so it behaves the same embedded in Framer */
   .lookbook { container-type: inline-size; width: 100%; max-width: 1100px; margin: 0 auto; padding: clamp(16px, 4cqi, 32px) 0; }
@@ -20,11 +19,11 @@
 
   /* Title: live text instead of the old baked-in image */
   .title { padding: 0 clamp(16px, 4cqi, 32px); display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-  .title h1 { margin: 0; font-weight: 800; font-size: clamp(26px, 7cqi, 40px); letter-spacing: .02em; text-transform: uppercase; line-height: 1; }
-  .price { margin: 0; font-weight: 900; text-transform: uppercase; line-height: 1; white-space: nowrap; }
-  .price small { font-size: 13px; font-weight: 800; letter-spacing: .08em; margin-right: 6px; vertical-align: middle; }
+  .title h1 { margin: 0; font-weight: 700; font-size: clamp(26px, 7cqi, 40px); letter-spacing: .02em; text-transform: uppercase; line-height: 1; }
+  .price { margin: 0; font-weight: 800; text-transform: uppercase; line-height: 1; white-space: nowrap; }
+  .price small { font-size: 13px; font-weight: 700; letter-spacing: .08em; margin-right: 6px; vertical-align: middle; }
   .price sup { font-size: .5em; }
-  .price b { font-size: clamp(30px, 8cqi, 48px); font-weight: 900; }
+  .price b { font-size: clamp(30px, 8cqi, 48px); font-weight: 800; }
 
   /* Carousel: native swipe with scroll snap */
   .stage { position: relative; }
