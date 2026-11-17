@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aéropostale: Seriously Soft Tees</title>
+<!-- Gotham via Rire's Adobe Fonts web project "interact-responsive (Gotham)" -->
+<link rel="stylesheet" href="https://use.typekit.net/sza7zys.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root { --navy: #1d2a44; }
+  html, body { margin: 0; background: #fff; }
+  body { font-family: "gotham", Helvetica, Arial, sans-serif; color: #111; -webkit-font-smoothing: antialiased; }
+  @media (min-width: 980px) { html, body { background: #f4f4f2; } body { padding: 40px 24px; } }
+
+  .tees { container-type: inline-size; width: 100%; max-width: 960px; margin: 0 auto; padding-bottom: 22px; background: #fff; }
+  @media (min-width: 980px) { .tees { padding: 24px 24px 22px; box-shadow: 0 2px 24px rgba(0,0,0,.08); } }
+
+  .hero { position: relative; aspect-ratio: 910 / 580; overflow: hidden; background: #cfe0e3; }
+  .hero > img.bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+  .title { position: absolute; left: 2.75%; top: 0; width: 56.4%; height: auto; transition: opacity .6s ease; }
+  .baby { position: absolute; right: 2.5%; top: 16%; text-align: right; color: #fff; text-shadow: 0 1px 3px rgba(0,30,50,.5), 0 0 12px rgba(0,30,50,.35); line-height: 1; }
+  .baby b { display: block; font-weight: 700; font-size: 2.3cqi; letter-spacing: .02em; }
+  .baby span { display: block; font-weight: 500; font-size: 1.2cqi; letter-spacing: .06em; margin-top: .35em; }
+
+  /* Phone: fit cards in a swipe row under the hero */
+  .fits-head { margin: 18px 16px 10px; font-weight: 700; font-size: 18px; letter-spacing: .04em; text-transform: uppercase; color: var(--navy); }
+  .fits { display: grid; grid-auto-flow: column; grid-auto-columns: 72%; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 6px 16px 10px; scroll-padding: 0 16px; scrollbar-width: none; overscroll-behavior-x: contain; }
+  .fits::-webkit-scrollbar { display: none; }
+  .card { scroll-snap-align: start; margin: 0; background: #fff; padding: 2.4%; box-shadow: 0 0 6px 1px rgba(0,0,0,.14); }
+  .card img { display: block; width: 100%; height: auto; aspect-ratio: 1; transition: opacity .25s ease; }
+  .toggle { display: none; }
+  .note { text-align: center; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #666; margin: 4px 0 0; }
+  .credit { text-align: center; font-size: 11px; color: #888; margin: 16px 16px 0; }
+  .baby-m { display: none; }
+
+  /* Phone: smaller Baby Tee label */
+  @container (max-width: 759px) {
+    .baby b { font-size: 4.2cqi; } .baby span { font-size: 2.3cqi; }
+    .baby { top: auto; bottom: 6%; right: 4%; }
+  }
+
+  /* Desktop: title fades, then the four fit cards cascade in over the beach, like the original */
+  @container (min-width: 760px) {
+    .fits-head, .note { display: none; }
+    .fits { position: absolute; left: 4.4%; top: 5%; width: 56.6%; overflow: visible; padding: 0; gap: 3.2cqi; scroll-snap-type: none;
+            grid-auto-flow: row; grid-template-columns: 1fr 1fr; grid-auto-columns: auto; }
+    .card { padding: 1.6%; opacity: 0; transform: translateY(10px); transition: opacity .5s ease, transform .5s ease; pointer-events: none; }
+    .card:hover img { opacity: .7; }
+    .hero.show-fits .card { opacity: 1; transform: none; pointer-events: auto; }
+    .hero.show-fits .card:nth-child(2) { transition-delay: .25s; }
+    .hero.show-fits .card:nth-child(3) { transition-delay: .5s; }
+    .hero.show-fits .card:nth-child(4) { transition-delay: .75s; }
+    .hero.show-fits .title { opacity: 0; }
+    .baby { opacity: 0; transition: opacity .5s ease .9s; }
+    .hero.show-fits .baby { opacity: 1; }
+    .toggle { display: block; position: absolute; left: 1.6%; bottom: 3%; z-index: 4; border: 0; border-radius: 999px; padding: 9px 14px; background: rgba(255,255,255,.9); color: var(--navy); font: 500 11px/1 "gotham", Helvetica, sans-serif; letter-spacing: .1em; text-transform: uppercase; cursor: pointer; box-shadow: 0 1px 5px rgba(0,0,0,.15); }
+  }
+  @media (prefers-reduced-motion: reduce) { .card, .title, .baby { transition: none !important; } }
+</style>
+</head>
+<body>
+<section class="tees" aria-label="Aéropostale Seriously Soft Tees">
+  <div class="hero" id="hero">
+    <img class="bg" src="img/g_hero.jpg" alt="Model on the beach in a striped baby tee and white shorts">
+    <img class="title" src="img/title.png" alt="Seriously Soft Tees">
+    <div class="baby"><b>BABY TEE</b><span>SHRUNKEN FIT</span></div>
+    <div class="fits" id="fits">
+      <figure class="card"><img src="img/g_slim-tees.jpg" alt="Slim Tee: fits close to the body"></figure>
+      <figure class="card"><img src="img/g_relaxed-tees.jpg" alt="Relaxed Tee: pocket crew"></figure>
+      <figure class="card"><img src="img/g_perfect-tee.jpg" alt="Perfect Tee: roll sleeve, relaxed fit, curved hem"></figure>
+      <figure class="card"><img src="img/g_easy-tees.jpg" alt="Easy Tee: boxy fit"></figure>
+    </div>
+    <button class="toggle" id="toggle">Back to title</button>
+  </div>
+  <p class="note">Swipe to find your fit</p>
+  <p class="credit">Creative and Art Direction by Rire Nakpodia. Originally designed and built for Aéropostale.</p>
+</section>
+
+<script>
+  const hero = document.getElementById("hero");
+  const tees = document.querySelector(".tees");
+  const fits = document.getElementById("fits");
+  const toggle = document.getElementById("toggle");
+  const head = Object.assign(document.createElement("h2"), { className: "fits-head", textContent: "Find your fit" });
+
+  // On phones the fit cards move out of the hero into their own swipe row
+  function place() {
+    const wide = tees.clientWidth >= 760;
+    if (wide && fits.parentElement !== hero) { hero.insertBefore(fits, toggle); head.remove(); }
+    if (!wide && fits.parentElement === hero) { hero.after(head, fits); }
+  }
+  new ResizeObserver(place).observe(tees);
+  place();
+
+  const show = on => { hero.classList.toggle("show-fits", on); toggle.textContent = on ? "Back to title" : "See the fits"; };
+  toggle.addEventListener("click", () => show(!hero.classList.contains("show-fits")));
+
+  // Play the reveal once the piece is on screen
+  const io = new IntersectionObserver(es => {
+    if (es.some(e => e.isIntersecting)) { io.disconnect(); setTimeout(() => show(true), matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 1400); }
+  }, { threshold: 0.5 });
+  io.observe(hero);
+
+  const report = () => parent !== window && parent.postMessage({ type: "lookbook-height", height: document.documentElement.scrollHeight }, "*");
+  new ResizeObserver(report).observe(document.body);
+</script>
+</body>
+</html>

@@ -10,5 +10,7 @@ The original desktop-era versions live in [rirenakpodia/interact](https://github
 | Aéropostale "We Are Obsessed" Lookbook | [interact/Aero.Lookbook.1](https://rirenakpodia.github.io/interact/Aero.Lookbook.1/) | [interact-responsive/Aero.Lookbook.1](https://rirenakpodia.github.io/interact-responsive/Aero.Lookbook.1/) |
 | Aéropostale Bethany Mota Collection launch | [interact/Aero.Lookbook.2](https://rirenakpodia.github.io/interact/Aero.Lookbook.2/) | [interact-responsive/Aero.Lookbook.2](https://rirenakpodia.github.io/interact-responsive/Aero.Lookbook.2/) |
 | Aéropostale "Hold Everything!" Best Bras | [interact/Aero_Bras](https://rirenakpodia.github.io/interact/Aero_Bras/) | [interact-responsive/Aero_Bras](https://rirenakpodia.github.io/interact-responsive/Aero_Bras/) |
+| Aéropostale Seriously Soft Tees | [interact/Aero_Soft_Tees](https://rirenakpodia.github.io/interact/Aero_Soft_Tees/) | [interact-responsive/Aero_Soft_Tees](https://rirenakpodia.github.io/interact-responsive/Aero_Soft_Tees/) |
+| Aéropostale Swim: Mix It. Match It. Love It. | [interact/Aero_Swim_2](https://rirenakpodia.github.io/interact/Aero_Swim_2/) | [interact-responsive/Aero_Swim_2](https://rirenakpodia.github.io/interact-responsive/Aero_Swim_2/) |
 
 Images in the rebuilds were AI upscaled (Real-ESRGAN) from the original web assets. Where copy was baked into an image, it was removed and reset as live text.

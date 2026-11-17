@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aéropostale Swim: Mix It. Match It. Love It.</title>
+<!-- Gotham via Rire's Adobe Fonts web project "interact-responsive (Gotham)" -->
+<link rel="stylesheet" href="https://use.typekit.net/sza7zys.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; background: #fff; }
+  body { font-family: "gotham", Helvetica, Arial, sans-serif; color: #111; -webkit-font-smoothing: antialiased; }
+  @media (min-width: 980px) { html, body { background: #f4f4f2; } body { padding: 40px 24px; } }
+
+  .swim { container-type: inline-size; width: 100%; max-width: 960px; margin: 0 auto; padding-bottom: 22px; background: #fff; }
+  @media (min-width: 980px) { .swim { padding: 24px 24px 22px; box-shadow: 0 2px 24px rgba(0,0,0,.08); } }
+
+  .stage { position: relative; --per: 2; }
+  .track { display: grid; grid-auto-flow: column; grid-auto-columns: calc(100% / var(--per)); overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; }
+  .track::-webkit-scrollbar { display: none; }
+  /* One long photo strip, cut into 20 columns: 16 looks and 4 color stories */
+  .col { scroll-snap-align: start; aspect-ratio: 400 / 990; background-image: url("img/g_swim.jpg"); background-size: 2000% 100%; background-repeat: no-repeat; margin: 0; }
+
+  .arrow { display: none; position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border: 0; border-radius: 50%; background: rgba(255,255,255,.94); color: #111; font-size: 22px; cursor: pointer; box-shadow: 0 1px 6px rgba(0,0,0,.22); z-index: 2; }
+  .arrow.prev { left: 10px; } .arrow.next { right: 10px; }
+  .dots { display: flex; justify-content: center; gap: 7px; padding-top: 14px; flex-wrap: wrap; }
+  .dots button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 50%; background: #b5b5b5; cursor: pointer; }
+  .dots button[aria-current="true"] { background: #111; width: 22px; border-radius: 4px; }
+  .note { text-align: center; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #666; margin: 10px 0 0; }
+  .credit { text-align: center; font-size: 11px; color: #888; margin: 14px 16px 0; }
+
+  @container (min-width: 560px) { .stage { --per: 3; } }
+  @container (min-width: 760px) {
+    .stage { --per: 4; }
+    .arrow { display: block; }
+    .note { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .track { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<section class="swim" aria-label="Aéropostale swim: Mix it. Match it. Love it.">
+  <div class="stage" id="stage">
+    <button class="arrow prev" aria-label="Previous">&#8249;</button>
+    <div class="track" id="track"></div>
+    <button class="arrow next" aria-label="Next">&#8250;</button>
+  </div>
+  <div class="dots" id="dots" aria-label="Choose a group"></div>
+  <p class="note">Swipe for more swim</p>
+  <p class="credit">Creative and Art Direction by Rire Nakpodia. Originally designed and built for Aéropostale.</p>
+</section>
+
+<script>
+  // Color stories that sit between the looks in the strip
+  const stories = { 1: "Fruit Punch: juicy, fruity, fun. Mix it. Match it. Love it.", 6: "Think Pink: summer's hottest hue. Mix it. Match it. Love it.",
+                    9: "Blue Crush: it's an ocean color scene. Mix it. Match it. Love it.", 14: "Purple Haze: get a little shade (of purple). Mix it. Match it. Love it.",
+                    17: "Aztec Dreams: total tribal style. Mix it. Match it. Love it." };
+  const track = document.getElementById("track");
+  const stage = document.getElementById("stage");
+  const dots = document.getElementById("dots");
+  const N = 20;
+  for (let i = 0; i < N; i++) {
+    const c = document.createElement("figure");
+    c.className = "col";
+    c.style.backgroundPosition = `${(i / (N - 1)) * 100}% 0`;
+    c.setAttribute("role", "img");
+    c.setAttribute("aria-label", stories[i] || "Swim look");
+    track.appendChild(c);
+  }
+  const per = () => parseInt(getComputedStyle(stage).getPropertyValue("--per")) || 2;
+  const colW = () => track.children[0].getBoundingClientRect().width;
+  const pages = () => Math.ceil(N / per());
+  const page = () => Math.min(pages() - 1, Math.round(track.scrollLeft / (colW() * per())));
+  function goTo(p) { const n = pages(); p = (p + n) % n; track.scrollTo({ left: Math.min(p * per(), N - per()) * colW(), behavior: "smooth" }); }
+  function build() {
+    dots.innerHTML = "";
+    for (let i = 0; i < pages(); i++) {
+      const b = document.createElement("button");
+      b.setAttribute("aria-label", "Group " + (i + 1));
+      b.addEventListener("click", () => goTo(i));
+      dots.appendChild(b);
+    }
+    sync();
+  }
+  function sync() { const p = track.scrollLeft + track.clientWidth >= track.scrollWidth - 2 ? pages() - 1 : page(); [...dots.children].forEach((d, i) => d.setAttribute("aria-current", i === p)); }
+  document.querySelector(".arrow.prev").addEventListener("click", () => goTo(page() - 1));
+  document.querySelector(".arrow.next").addEventListener("click", () => goTo(page() + 1));
+  document.addEventListener("keydown", e => { if (e.key === "ArrowRight") goTo(page() + 1); if (e.key === "ArrowLeft") goTo(page() - 1); });
+  track.addEventListener("scroll", () => requestAnimationFrame(sync), { passive: true });
+  new ResizeObserver(build).observe(track);
+
+  const report = () => parent !== window && parent.postMessage({ type: "lookbook-height", height: document.documentElement.scrollHeight }, "*");
+  new ResizeObserver(report).observe(document.body);
+</script>
+</body>
+</html>
