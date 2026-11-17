@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aéropostale Shorts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; background: #e1e1e1; }
+  @media (min-width: 900px) { html, body { background: #f4f4f2; } body { padding: 40px 24px; } }
+  body { font-family: "Gotham", Montserrat, Helvetica, Arial, sans-serif; color: #111; -webkit-font-smoothing: antialiased; }
+
+  /* Sizes off the container, not the window, so it behaves the same embedded in Framer */
+  .lookbook { container-type: inline-size; width: 100%; max-width: 1100px; margin: 0 auto; padding: clamp(16px, 4cqi, 32px) 0; }
+
+  .wrap { display: grid; grid-template-columns: 1fr; gap: 16px; }
+
+  /* Title: live text instead of the old baked-in image */
+  .title { padding: 0 clamp(16px, 4cqi, 32px); display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .title h1 { margin: 0; font-weight: 800; font-size: clamp(26px, 7cqi, 40px); letter-spacing: .02em; text-transform: uppercase; line-height: 1; }
+  .price { margin: 0; font-weight: 900; text-transform: uppercase; line-height: 1; white-space: nowrap; }
+  .price small { font-size: 13px; font-weight: 800; letter-spacing: .08em; margin-right: 6px; vertical-align: middle; }
+  .price sup { font-size: .5em; }
+  .price b { font-size: clamp(30px, 8cqi, 48px); font-weight: 900; }
+
+  /* Carousel: native swipe with scroll snap */
+  .stage { position: relative; }
+  .track {
+    display: grid; grid-auto-flow: column;
+    grid-auto-columns: 62%;
+    gap: 10px;
+    overflow-x: auto; overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory; scroll-behavior: smooth;
+    padding: 0 clamp(16px, 4cqi, 32px);
+    scroll-padding: 0 clamp(16px, 4cqi, 32px);
+    scrollbar-width: none;
+  }
+  .track::-webkit-scrollbar { display: none; }
+
+  .card { scroll-snap-align: start; margin: 0; position: relative; aspect-ratio: 243 / 468; background: #fff; overflow: hidden; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity .45s ease; }
+  .card .alt { opacity: 0; }
+  .card.is-flipped .alt { opacity: 1; }
+  .card:focus-visible { outline: 3px solid #111; outline-offset: 2px; }
+
+  /* Tap hint, shown only on touch screens */
+  .hint { position: absolute; right: 8px; bottom: 8px; width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,.9); display: grid; place-items: center; font-size: 16px; line-height: 1; box-shadow: 0 1px 4px rgba(0,0,0,.2); pointer-events: none; transition: transform .45s ease; }
+  .card.is-flipped .hint { transform: rotate(180deg); }
+  @media (hover: hover) and (pointer: fine) {
+    .hint { display: none; }
+    .card:hover .alt { opacity: 1; }
+  }
+
+  /* Arrows: hidden on small screens where people swipe */
+  .arrow { display: none; position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border: 0; border-radius: 50%; background: rgba(255,255,255,.92); color: #111; font-size: 22px; cursor: pointer; box-shadow: 0 1px 6px rgba(0,0,0,.2); z-index: 2; }
+  .arrow:disabled { opacity: .3; cursor: default; }
+  .arrow.prev { left: 6px; } .arrow.next { right: 6px; }
+
+  .dots { display: flex; justify-content: center; gap: 8px; padding-top: 6px; }
+  .dots button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 50%; background: #9a9a9a; cursor: pointer; }
+  .dots button[aria-current="true"] { background: #111; width: 22px; border-radius: 4px; }
+  .note { text-align: center; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: #555; margin: 0; }
+
+  /* Tablet: about 2.5 cards in view */
+  @container (min-width: 560px) {
+    .track { grid-auto-columns: 38%; }
+  }
+
+  /* Desktop: original layout, vertical title column plus three cards per view */
+  @media (min-width: 900px) {
+    .lookbook { max-width: 960px; background: #e1e1e1; padding: 28px 0 20px; box-shadow: 0 2px 24px rgba(0,0,0,.08); }
+  }
+  @container (min-width: 860px) {
+    .wrap { grid-template-columns: auto 1fr; align-items: stretch; gap: 0; padding: 0 32px; }
+    .title { flex-direction: column; justify-content: space-between; align-items: center; padding: 0 18px 0 0; }
+    .title h1 { writing-mode: vertical-rl; transform: rotate(180deg); font-size: 34px; letter-spacing: .04em; }
+    .price { writing-mode: horizontal-tb; text-align: center; }
+    .price small { display: block; margin: 0 0 4px; }
+    .track { grid-auto-columns: calc((100% - 20px) / 3); padding: 0; scroll-padding: 0; }
+    .arrow { display: block; }
+    .note { display: none; }
+  }
+
+  .credit { text-align: center; font-size: 11px; color: #777; margin: 20px 16px 0; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .track { scroll-behavior: auto; }
+    .card img, .hint { transition: none; }
+  }
+</style>
+</head>
+<body>
+<section class="lookbook" aria-label="Aéropostale shorts lookbook">
+  <div class="wrap">
+    <header class="title">
+      <h1>Aéropostale Shorts</h1>
+      <p class="price"><small>Starting at</small><b><sup>$</sup>24</b></p>
+    </header>
+
+    <div class="stage">
+      <button class="arrow prev" aria-label="Previous styles">&#8249;</button>
+      <div class="track" id="track"></div>
+      <button class="arrow next" aria-label="Next styles">&#8250;</button>
+      <div class="dots" id="dots" role="tablist" aria-label="Choose a group of styles"></div>
+    </div>
+    <p class="note">Swipe for more styles · Tap a look to see the fit</p>
+  </div>
+  <p class="credit">Portfolio piece by Rire Design. Originally designed and built for Aéropostale.</p>
+</section>
+
+<script>
+  const styles = [
+    ["midi", "Midi"],
+    ["shorty", "Shorty"],
+    ["twillmidi", "Twill Midi"],
+    ["bermuda", "Bermuda"],
+    ["highwaistedshorty", "High Waisted Shorty"],
+    ["seriouslystretchy", "Seriously Stretchy"]
+  ];
+
+  const track = document.getElementById("track");
+  const dots = document.getElementById("dots");
+  const prev = document.querySelector(".arrow.prev");
+  const next = document.querySelector(".arrow.next");
+
+  styles.forEach(([file, name]) => {
+    const fig = document.createElement("figure");
+    fig.className = "card";
+    fig.tabIndex = 0;
+    fig.setAttribute("role", "button");
+    fig.setAttribute("aria-pressed", "false");
+    fig.setAttribute("aria-label", name + " shorts. Show the fit view");
+    fig.innerHTML =
+      '<img src="img/' + file + '.jpg" alt="' + name + ' shorts, full look">' +
+      '<img class="alt" src="img/' + file + '2.jpg" alt="' + name + ' shorts, fit detail" loading="lazy">' +
+      '<span class="hint" aria-hidden="true">&#8635;</span>';
+    const flip = () => {
+      const on = fig.classList.toggle("is-flipped");
+      fig.setAttribute("aria-pressed", on);
+    };
+    fig.addEventListener("click", () => { if (!matchMedia("(hover: hover) and (pointer: fine)").matches) flip(); stopAuto(); });
+    fig.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); flip(); stopAuto(); } });
+    track.appendChild(fig);
+  });
+
+  const cards = [...track.children];
+
+  // A "page" is however many cards fit in view, so this works at any width
+  function perView() {
+    const w = cards[0].getBoundingClientRect().width + 10;
+    return Math.max(1, Math.round(track.clientWidth / w));
+  }
+  function pageCount() { return Math.ceil(cards.length / perView()); }
+  function currentPage() {
+    const w = cards[0].getBoundingClientRect().width + 10;
+    return Math.min(pageCount() - 1, Math.round(track.scrollLeft / (w * perView())));
+  }
+  function goTo(p) {
+    const n = pageCount();
+    p = (p + n) % n;
+    const i = Math.min(p * perView(), cards.length - 1);
+    track.scrollTo({ left: cards[i].offsetLeft - cards[0].offsetLeft, behavior: "smooth" });
+  }
+
+  function buildDots() {
+    dots.innerHTML = "";
+    for (let i = 0; i < pageCount(); i++) {
+      const b = document.createElement("button");
+      b.setAttribute("aria-label", "Group " + (i + 1));
+      b.addEventListener("click", () => { goTo(i); stopAuto(); });
+      dots.appendChild(b);
+    }
+    sync();
+  }
+  function sync() {
+    const p = currentPage();
+    [...dots.children].forEach((d, i) => d.setAttribute("aria-current", i === p));
+  }
+
+  prev.addEventListener("click", () => { goTo(currentPage() - 1); stopAuto(); });
+  next.addEventListener("click", () => { goTo(currentPage() + 1); stopAuto(); });
+  track.addEventListener("scroll", () => requestAnimationFrame(sync), { passive: true });
+  new ResizeObserver(buildDots).observe(track);
+
+  // Auto-advance like the original, stopping as soon as someone interacts
+  let auto = null;
+  function stopAuto() { clearInterval(auto); auto = null; }
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    auto = setInterval(() => goTo(currentPage() + 1), 4000);
+    ["pointerdown", "wheel", "touchstart", "keydown"].forEach(ev => track.addEventListener(ev, stopAuto, { passive: true }));
+  }
+
+  // Lets a Framer embed size itself to the content
+  const report = () => parent !== window && parent.postMessage({ type: "lookbook-height", height: document.documentElement.scrollHeight }, "*");
+  new ResizeObserver(report).observe(document.body);
+</script>
+</body>
+</html>
