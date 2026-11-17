@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aéropostale: Bethany Mota, The Final Collection</title>
+<!-- Gotham via Rire's Adobe Fonts web project "interact-responsive (Gotham)" -->
+<link rel="stylesheet" href="https://use.typekit.net/sza7zys.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root { --stone: #d9d8d4; }
+  html, body { margin: 0; background: #fff; }
+  body { font-family: "gotham", Helvetica, Arial, sans-serif; color: #111; -webkit-font-smoothing: antialiased; }
+  @media (min-width: 980px) { html, body { background: #f4f4f2; } body { padding: 40px 24px; } }
+
+  .final { container-type: inline-size; width: 100%; max-width: 960px; margin: 0 auto; padding-bottom: 22px; background: #fff; }
+  @media (min-width: 980px) { .final { padding: 24px 24px 22px; box-shadow: 0 2px 24px rgba(0,0,0,.08); } }
+
+  .logo { display: block; width: 100%; height: auto; aspect-ratio: 910 / 69; object-fit: contain; }
+
+  /* "FINAL COLLECTION" lettering filled with photos, panning across */
+  .strip { position: relative; height: 34cqi; max-height: 160px; background: #fff url("img/g_strip.png") no-repeat 0 50%; background-size: auto 92%; animation: pan 9s ease-in-out infinite alternate; }
+  @keyframes pan { from { background-position: 0% 50%; } to { background-position: 100% 50%; } }
+
+  .intro { background: var(--stone); padding: 18px 16px 16px; text-align: center; }
+  .intro img { width: min(100%, 356px); height: auto; display: block; margin: 0 auto; }
+
+  .thumbs { display: flex; justify-content: center; gap: 6px; padding: 12px 0 0; }
+  .thumb { width: 22%; max-width: 90px; aspect-ratio: 90 / 48; padding: 0; border: 0; background: transparent; cursor: pointer; position: relative; }
+  .thumb img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .thumb .on { opacity: 0; transition: opacity .25s ease; }
+  .thumb[aria-current="true"] .on, .thumb:hover .on { opacity: 1; }
+
+  .stage { position: relative; margin-top: 14px; }
+  .track { display: grid; grid-auto-flow: column; grid-auto-columns: 78%; gap: 10px; padding: 0 16px; scroll-padding: 0 16px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; }
+  .track::-webkit-scrollbar { display: none; }
+  .look { scroll-snap-align: start; margin: 0; aspect-ratio: 4 / 5; background: var(--stone) no-repeat; background-size: auto 100%; }
+
+  .main { display: none; }
+  .credit { text-align: center; font-size: 11px; color: #888; margin: 16px 16px 0; }
+  .note { text-align: center; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #666; margin: 10px 0 0; }
+
+  /* Desktop: the original sequence. Lettering pans, then the slider fades in with the copy and thumbnails over it */
+  @container (min-width: 760px) {
+    .intro, .stage, .note { display: none; }
+    .frame { position: relative; aspect-ratio: 910 / 464; overflow: hidden; background: #fff; }
+    .strip { position: absolute; inset: 0 0 auto 0; height: 87.9%; max-height: none; background-size: auto 100%; background-position: 0 0; animation: none; transition: background-position 2s ease; }
+    .frame.panned .strip { background-position: 100% 0; }
+    .main { display: block; position: absolute; inset: 0; background: var(--stone); opacity: 0; visibility: hidden; transition: opacity .6s ease, visibility .6s; }
+    .frame.live .main { opacity: 1; visibility: visible; }
+    .slide { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .45s ease; }
+    .slide.on { opacity: 1; }
+    .copy { position: absolute; left: 28.46%; top: 8.6%; width: 41.8%; z-index: 2; }
+    .copy > img { display: block; width: 93.7%; margin-left: 3.2%; height: auto; }
+    .copy .thumbs { justify-content: flex-start; gap: 1.33%; padding: 0; margin-top: 0; }
+    .copy .thumb { width: 23.7%; max-width: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .strip { animation: none; transition: none; } .slide, .main { transition: none; } }
+</style>
+</head>
+<body>
+<section class="final" aria-label="Bethany Mota: The Final Collection">
+  <img class="logo" src="img/bethany-logo-use.png" alt="Bethany Mota">
+  <div class="frame" id="frame">
+    <div class="strip" role="img" aria-label="Final Collection, lettering filled with photos of the collection"></div>
+    <div class="main" id="main">
+      <div class="copy" id="copyD"><img src="img/bethany-overlay.png" alt="Bethany Mota: The Final Collection. She's saved the best for last. Shop Bethany's final collection with Aéropostale!"></div>
+    </div>
+  </div>
+  <div class="intro" id="intro"><img src="img/bethany-overlay.png" alt="Bethany Mota: The Final Collection. She's saved the best for last. Shop Bethany's final collection with Aéropostale!"></div>
+  <div class="stage"><div class="track" id="track"></div></div>
+  <p class="note">Swipe for more looks</p>
+  <p class="credit">Creative and Art Direction by Rire Nakpodia. Originally designed and built for Aéropostale.</p>
+</section>
+
+<script>
+  // Thumbnails 1-4 show slides 4, 3, 2, 1, as in the original. Each slide pairs two shots of a look.
+  const sets = [
+    { slide: 4, thumb: ["bethany-nav-1", "bethany-nav-1-hover"], alt: "Black floral halter skater dress", halves: [0, 100] },
+    { slide: 3, thumb: ["beth-nav-2", "beth-nav-2-hover"], alt: "Blush cold-shoulder top with grey shorts", halves: [0, 100] },
+    { slide: 2, thumb: ["beth-nav-3", "beth-nav-3-hover"], alt: "Black plunge romper", halves: [0, 100] },
+    { slide: 1, thumb: ["beth-nav-4", "beth-nav-4-hover"], alt: "Open-knit cardigan over a printed romper", halves: [0] }
+  ];
+  const frame = document.getElementById("frame");
+  const main = document.getElementById("main");
+  const copyD = document.getElementById("copyD");
+  const intro = document.getElementById("intro");
+  const track = document.getElementById("track");
+  const wide = () => document.querySelector(".final").clientWidth >= 760;
+
+  // Desktop slides
+  const slides = sets.map(s => {
+    const img = document.createElement("img");
+    img.className = "slide"; img.src = `img/g_slide-${s.slide}.jpg`; img.alt = s.alt;
+    main.insertBefore(img, copyD); return img;
+  });
+
+  // Phone looks (one card per shot)
+  const firstCard = [];
+  sets.forEach((s, si) => s.halves.forEach((p, hi) => {
+    const f = document.createElement("figure");
+    f.className = "look"; f.dataset.set = si;
+    f.style.backgroundImage = `url("img/g_slide-${s.slide}.jpg")`; f.style.backgroundPosition = `${p}% 0`;
+    f.setAttribute("role", "img"); f.setAttribute("aria-label", s.alt);
+    track.appendChild(f); if (hi === 0) firstCard[si] = f;
+  }));
+
+  // Thumbnails: one row on desktop (inside the copy block), one row on phones (under the intro copy)
+  function makeThumbs(host) {
+    const row = document.createElement("div"); row.className = "thumbs";
+    sets.forEach((s, i) => {
+      const b = document.createElement("button"); b.className = "thumb"; b.dataset.i = i;
+      b.setAttribute("aria-label", s.alt);
+      b.innerHTML = `<img src="img/${s.thumb[0]}.png" alt=""><img class="on" src="img/${s.thumb[1]}.png" alt="">`;
+      row.appendChild(b);
+    });
+    host.appendChild(row); return [...row.children];
+  }
+  const thumbsD = makeThumbs(copyD), thumbsM = makeThumbs(intro);
+  let cur = 0;
+  function show(i) {
+    cur = (i + sets.length) % sets.length;
+    slides.forEach((s, k) => s.classList.toggle("on", k === cur));
+    [...thumbsD, ...thumbsM].forEach(t => t.setAttribute("aria-current", +t.dataset.i === cur));
+  }
+  thumbsD.forEach(t => { t.addEventListener("mouseenter", () => { stop(); show(+t.dataset.i); }); t.addEventListener("click", () => { stop(); show(+t.dataset.i); }); });
+  thumbsM.forEach(t => t.addEventListener("click", () => { const c = firstCard[+t.dataset.i]; track.scrollTo({ left: c.offsetLeft - track.children[0].offsetLeft, behavior: "smooth" }); }));
+  track.addEventListener("scroll", () => requestAnimationFrame(() => {
+    const cards = [...track.children]; const stepW = cards[1].offsetLeft - cards[0].offsetLeft;
+    const c = cards[Math.min(cards.length - 1, Math.round(track.scrollLeft / stepW))];
+    thumbsM.forEach(t => t.setAttribute("aria-current", t.dataset.i === c.dataset.set));
+  }), { passive: true });
+  show(0);
+
+  // Desktop sequence: pan the lettering, fade in the slider, then cycle through the looks until someone takes over
+  let auto = null;
+  const stop = () => { clearInterval(auto); auto = null; };
+  main.addEventListener("pointerenter", stop);
+  function play() {
+    if (!wide()) return;
+    const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    setTimeout(() => frame.classList.add("panned"), still ? 0 : 750);
+    setTimeout(() => {
+      frame.classList.add("live");
+      if (!still) auto = setInterval(() => show(cur + 1), 3000);
+    }, still ? 0 : 2900);
+  }
+  const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { io.disconnect(); play(); } }, { threshold: 0.4 });
+  io.observe(frame);
+
+  const report = () => parent !== window && parent.postMessage({ type: "lookbook-height", height: document.documentElement.scrollHeight }, "*");
+  new ResizeObserver(report).observe(document.body);
+</script>
+</body>
+</html>

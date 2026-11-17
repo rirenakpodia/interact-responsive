@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aéropostale: Bethany Mota, Destination Spring Escape</title>
+<!-- Gotham via Rire's Adobe Fonts web project "interact-responsive (Gotham)" -->
+<link rel="stylesheet" href="https://use.typekit.net/sza7zys.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; background: #fff; }
+  body { font-family: "gotham", Helvetica, Arial, sans-serif; color: #111; -webkit-font-smoothing: antialiased; }
+  @media (min-width: 980px) { html, body { background: #f4f4f2; } body { padding: 40px 24px; } }
+
+  .spring { container-type: inline-size; width: 100%; max-width: 960px; margin: 0 auto; padding-bottom: 22px; background: #fff; }
+  @media (min-width: 980px) { .spring { padding: 24px 24px 22px; box-shadow: 0 2px 24px rgba(0,0,0,.08); } }
+
+  .stage { position: relative; }
+  .track { display: grid; grid-auto-flow: column; grid-auto-columns: 84%; gap: 10px; padding: 0 16px; scroll-padding: 0 16px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; }
+  .track::-webkit-scrollbar { display: none; }
+  /* Everything is cut from one panorama: phones get five single looks, wide screens the original three panels */
+  .shot { scroll-snap-align: start; margin: 0; background: #e1e1e1 url("img/g_pano.jpg") no-repeat; background-size: auto 100%; }
+  .look { aspect-ratio: 4 / 5; }
+  .panel { aspect-ratio: 910.67 / 500; display: none; }
+
+  .badge { position: absolute; left: 16px; bottom: 0; width: 36%; max-width: 262px; height: auto; pointer-events: none; z-index: 2; }
+
+  .arrow { display: none; position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border: 0; border-radius: 50%; background: rgba(255,255,255,.92); color: #111; font-size: 22px; cursor: pointer; box-shadow: 0 1px 6px rgba(0,0,0,.22); z-index: 3; }
+  .arrow.prev { left: 10px; } .arrow.next { right: 10px; }
+  .dots { display: flex; justify-content: center; gap: 8px; padding-top: 14px; }
+  .dots button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 50%; background: #b5b5b5; cursor: pointer; }
+  .dots button[aria-current="true"] { background: #111; width: 22px; border-radius: 4px; }
+  .note { text-align: center; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #666; margin: 10px 0 0; }
+  .credit { text-align: center; font-size: 11px; color: #888; margin: 14px 16px 0; }
+
+  @container (min-width: 760px) {
+    .track { grid-auto-columns: 100%; gap: 0; padding: 0; scroll-padding: 0; }
+    .look { display: none; }
+    .panel { display: block; }
+    .badge { left: 0; width: 28.8%; }
+    .arrow { display: block; }
+    .note { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .track { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<section class="spring" aria-label="Bethany Mota: Destination Spring Escape">
+  <div class="stage">
+    <button class="arrow prev" aria-label="Previous">&#8249;</button>
+    <div class="track" id="track"></div>
+    <button class="arrow next" aria-label="Next">&#8250;</button>
+    <img class="badge" src="img/badge.png" alt="Destination: Spring Escape. Bethany Mota">
+  </div>
+  <div class="dots" id="dots" aria-label="Choose a look"></div>
+  <p class="note">Swipe for more looks</p>
+  <p class="credit">Creative and Art Direction by Rire Nakpodia. Originally designed and built for Aéropostale.</p>
+</section>
+
+<script>
+  const track = document.getElementById("track");
+  const dots = document.getElementById("dots");
+  // Phone looks: where each look sits in the panorama (0% = far left, 100% = far right)
+  const looks = [
+    [10.7, "Bethany among white flowers"], [42.5, "Wide-brim hat and printed top"], [62.6, "Printed jumpsuit with lace-up back"],
+    [84, "Cropped denim jacket over a white tank"], [100, "Black embroidered tunic"]
+  ];
+  looks.forEach(([p, alt]) => {
+    const f = document.createElement("figure");
+    f.className = "shot look"; f.style.backgroundPosition = `${p}% 0`;
+    f.setAttribute("role", "img"); f.setAttribute("aria-label", alt);
+    track.appendChild(f);
+  });
+  [0, 50, 100].forEach((p, i) => {
+    const f = document.createElement("figure");
+    f.className = "shot panel"; f.style.backgroundPosition = `${p}% 0`;
+    f.setAttribute("role", "img"); f.setAttribute("aria-label", "Spring Escape, panel " + (i + 1));
+    track.appendChild(f);
+  });
+
+  const items = () => [...track.children].filter(c => getComputedStyle(c).display !== "none");
+  const step = () => { const v = items(); return v.length > 1 ? v[1].offsetLeft - v[0].offsetLeft : track.clientWidth; };
+  const current = () => Math.min(items().length - 1, Math.round(track.scrollLeft / step()));
+  function goTo(i) { const v = items(); i = (i + v.length) % v.length; track.scrollTo({ left: v[i].offsetLeft - v[0].offsetLeft, behavior: "smooth" }); }
+  function build() {
+    dots.innerHTML = "";
+    items().forEach((_, i) => { const b = document.createElement("button"); b.setAttribute("aria-label", "Slide " + (i + 1)); b.addEventListener("click", () => { stop(); goTo(i); }); dots.appendChild(b); });
+    sync();
+  }
+  function sync() { const p = current(); [...dots.children].forEach((d, i) => d.setAttribute("aria-current", i === p)); }
+  track.addEventListener("scroll", () => requestAnimationFrame(sync), { passive: true });
+  new ResizeObserver(build).observe(track);
+
+  // Auto-advance like the original (every 2 seconds on wide screens, a little slower on phones) until someone takes over
+  let auto = null;
+  const stop = () => { clearInterval(auto); auto = null; };
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) auto = setInterval(() => goTo(current() + 1), track.clientWidth >= 700 ? 2500 : 3500);
+  ["pointerdown", "wheel", "touchstart", "keydown"].forEach(ev => track.addEventListener(ev, stop, { passive: true }));
+  document.querySelector(".arrow.prev").addEventListener("click", () => { stop(); goTo(current() - 1); });
+  document.querySelector(".arrow.next").addEventListener("click", () => { stop(); goTo(current() + 1); });
+  document.addEventListener("keydown", e => { if (e.key === "ArrowRight") { stop(); goTo(current() + 1); } if (e.key === "ArrowLeft") { stop(); goTo(current() - 1); } });
+
+  const report = () => parent !== window && parent.postMessage({ type: "lookbook-height", height: document.documentElement.scrollHeight }, "*");
+  new ResizeObserver(report).observe(document.body);
+</script>
+</body>
+</html>
