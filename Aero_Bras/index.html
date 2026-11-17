@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aéropostale: Hold Everything! Our Best Bras</title>
+<!-- Gotham via Rire's Adobe Fonts web project "interact-responsive (Gotham)"; League Gothic stands in for the original condensed display face -->
+<link rel="stylesheet" href="https://use.typekit.net/sza7zys.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=League+Gothic&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root { --coral: #ff9e94; --nav: #ff8d81; --nav-on: #ff4f4f; --pink: #f0b0a0; }
+  html, body { margin: 0; background: #fff; }
+  body { font-family: "gotham", Helvetica, Arial, sans-serif; color: #111; -webkit-font-smoothing: antialiased; }
+  @media (min-width: 980px) { html, body { background: #f4f4f2; } body { padding: 40px 24px; } }
+
+  .bras { container-type: inline-size; width: 100%; max-width: 960px; margin: 0 auto; padding: 20px 0 22px; background: #fff; }
+  @media (min-width: 980px) { .bras { padding: 24px 24px 22px; box-shadow: 0 2px 24px rgba(0,0,0,.08); } }
+
+  .display { font-family: "League Gothic", "Arial Narrow", Impact, sans-serif; font-stretch: condensed; font-weight: 400; text-transform: uppercase; letter-spacing: .01em; line-height: .95; }
+
+  /* Headline: on phones it sits on top, on desktop it floats over the grid like the original */
+  .headline { color: var(--coral); text-align: center; margin: 0 16px 18px; pointer-events: none; }
+  .headline span { display: block; }
+  .headline .l1 { font-size: 13cqi; }
+  .headline .l2 { font-size: 10.5cqi; margin-top: .15em; }
+
+  /* Phone: one section per category, three looks you swipe through */
+  .grid { display: grid; gap: 22px; }
+  .cat { display: flex; flex-direction: column; }
+  .label { order: -1; display: block; width: 100%; margin: 0; padding: 12px 16px 9px; border: 0; background: var(--nav); color: #fff; font-size: 26px; text-align: left; transition: background-color .25s; cursor: pointer; }
+  .label.is-on, .label:hover { background: var(--nav-on); }
+  .row { display: grid; grid-auto-flow: column; grid-auto-columns: 64%; gap: 8px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 8px 16px 0; scroll-padding: 0 16px; scrollbar-width: none; overscroll-behavior-x: contain; }
+  .row::-webkit-scrollbar { display: none; }
+
+  .tile { scroll-snap-align: start; position: relative; aspect-ratio: 228 / 286; overflow: hidden; background: #eee; margin: 0; }
+  .tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0; transition: opacity .35s ease; }
+  .tile img.bw { opacity: 1; }
+  .tile.is-playing img.bw { opacity: 0; }
+  .tile.is-playing img.on { opacity: 1; }
+
+  .closing { text-align: center; margin: 26px 16px 0; }
+  .closing p { margin: 0; font-weight: 400; text-transform: uppercase; letter-spacing: .03em; font-size: 15px; line-height: 1.35; }
+  .heart { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 14px; }
+  .heart::before, .heart::after { content: ""; height: 2px; width: min(190px, 30%); background: var(--pink); }
+  .heart svg { width: 22px; height: 20px; fill: var(--pink); }
+
+  .credit { text-align: center; font-size: 11px; color: #888; margin: 22px 16px 0; }
+
+  /* Desktop: the original 4 x 3 grid with category bars underneath */
+  @container (min-width: 760px) {
+    .stage { position: relative; }
+    .headline { position: absolute; z-index: 3; left: 0; right: 0; top: 0; height: calc(100% - 7cqi); margin: 0; display: flex; flex-direction: column; justify-content: space-evenly; transition: opacity .4s ease; }
+    .headline .l1 { font-size: 9.6cqi; } .headline .l2 { font-size: 10.2cqi; }
+    .stage.is-hover .headline { opacity: 0; }
+    .grid { grid-template-columns: repeat(4, 1fr); gap: 0; }
+    .label { order: 0; margin-top: 7px; padding: 0; height: 6.4cqi; display: grid; place-items: center; text-align: center; font-size: 3.1cqi; }
+    .row { grid-auto-flow: row; grid-auto-columns: auto; gap: 0; padding: 0; overflow: visible; scroll-snap-type: none; }
+    .closing { margin-top: 3cqi; }
+    .closing p { font-size: 2.85cqi; }
+  }
+  @media (prefers-reduced-motion: reduce) { .tile img { transition: none; } }
+</style>
+</head>
+<body>
+<section class="bras" aria-label="Aéropostale best bras">
+  <div class="stage" id="stage">
+    <h1 class="headline display"><span class="l1">Hold everything!</span> <span class="l2">Check out our best bras</span></h1>
+    <div class="grid" id="grid"></div>
+  </div>
+  <div class="closing">
+    <p>Every style, every color, every pattern,<br>for every personality</p>
+    <div class="heart" aria-hidden="true"><svg viewBox="0 0 24 22"><path d="M12 21.6 10.3 20C4.2 14.6 0 10.9 0 6.4 0 2.8 2.8 0 6.4 0 8.5 0 10.5 1 12 2.6 13.5 1 15.5 0 17.6 0 21.2 0 24 2.8 24 6.4c0 4.5-4.2 8.2-10.3 13.6L12 21.6Z"/></svg></div>
+  </div>
+  <p class="credit">Creative and Art Direction by Rire Nakpodia. Originally designed and built for Aéropostale.</p>
+</section>
+
+<script>
+  const cats = [
+    { key: "bralettes", label: "Bralettes + Bandeaus" },
+    { key: "multiway-bra", label: "Multiway Bra" },
+    { key: "push-up", label: "Push-Up Bra" },
+    { key: "sport-bras", label: "Sport Bras" }
+  ];
+  const grid = document.getElementById("grid");
+  const stage = document.getElementById("stage");
+  const fine = matchMedia("(hover: hover) and (pointer: fine)");
+  const still = matchMedia("(prefers-reduced-motion: reduce)");
+
+  // Each tile: a black-and-white still that turns into a three-frame color loop
+  function makeTile(key, t) {
+    const fig = document.createElement("figure");
+    fig.className = "tile";
+    let html = `<img class="bw" src="img/g_${key}-${t}-0.jpg" alt="">`;
+    for (let n = 1; n <= 3; n++) html += `<img src="img/g_${key}-${t}-${n}.jpg" alt="" loading="lazy">`;
+    fig.innerHTML = html;
+    const frames = [...fig.querySelectorAll("img:not(.bw)")];
+    let i = 0, timer = null;
+    fig.play = () => {
+      if (timer || still.matches) { fig.classList.add("is-playing"); frames[0].classList.add("on"); return; }
+      fig.classList.add("is-playing");
+      frames.forEach(f => f.classList.remove("on")); i = 0; frames[0].classList.add("on");
+      timer = setInterval(() => { frames[i].classList.remove("on"); i = (i + 1) % 3; frames[i].classList.add("on"); }, 750);
+    };
+    fig.stop = () => { clearInterval(timer); timer = null; fig.classList.remove("is-playing"); frames.forEach(f => f.classList.remove("on")); };
+    return fig;
+  }
+
+  cats.forEach(c => {
+    const sec = document.createElement("section");
+    sec.className = "cat";
+    sec.setAttribute("aria-label", c.label);
+    const row = document.createElement("div");
+    row.className = "row";
+    const tiles = ["A", "B", "C"].map(t => makeTile(c.key, t));
+    tiles.forEach(t => row.appendChild(t));
+    tiles[0].querySelector(".bw").alt = c.label;
+    const label = document.createElement("button");
+    label.className = "label display";
+    label.textContent = c.label;
+    sec.append(row, label);
+    grid.appendChild(sec);
+
+    // Desktop: hover a photo to play it, hover the bar to play the whole column
+    tiles.forEach(t => {
+      t.addEventListener("mouseenter", () => { if (fine.matches) { t.play(); label.classList.add("is-on"); } });
+      t.addEventListener("mouseleave", () => { if (fine.matches) { t.stop(); label.classList.remove("is-on"); } });
+    });
+    label.addEventListener("mouseenter", () => { if (fine.matches) { tiles.forEach(t => t.play()); label.classList.add("is-on"); } });
+    label.addEventListener("mouseleave", () => { if (fine.matches) { tiles.forEach(t => t.stop()); label.classList.remove("is-on"); } });
+    // Touch: tapping a bar plays its three looks
+    label.addEventListener("click", () => {
+      if (fine.matches) return;
+      const on = label.classList.toggle("is-on");
+      tiles.forEach(t => on ? t.play() : t.stop());
+    });
+    tiles.forEach(t => t.addEventListener("click", () => { if (!fine.matches) t.classList.contains("is-playing") ? t.stop() : t.play(); }));
+  });
+
+  // Headline fades away while the pointer is over the grid, like the original
+  stage.addEventListener("mouseenter", () => { if (fine.matches) stage.classList.add("is-hover"); });
+  stage.addEventListener("mouseleave", () => { if (fine.matches) setTimeout(() => stage.classList.remove("is-hover"), 500); });
+
+  // Phones and tablets: a look plays on its own once it's mostly in view
+  const io = new IntersectionObserver(entries => {
+    if (fine.matches) return;
+    entries.forEach(e => e.isIntersecting ? e.target.play() : e.target.stop());
+  }, { threshold: 0.75 });
+  document.querySelectorAll(".tile").forEach(t => io.observe(t));
+
+  const report = () => parent !== window && parent.postMessage({ type: "lookbook-height", height: document.documentElement.scrollHeight }, "*");
+  new ResizeObserver(report).observe(document.body);
+</script>
+</body>
+</html>
