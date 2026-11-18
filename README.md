@@ -23,5 +23,6 @@ The original desktop-era versions live in [rirenakpodia/interact](https://github
 | Aéropostale Homepage Carousel | [interact/D_SPOT_CAROUSEL](https://rirenakpodia.github.io/interact/D_SPOT_CAROUSEL/hp-carosel.html) | [interact-responsive/D_SPOT_CAROUSEL](https://rirenakpodia.github.io/interact-responsive/D_SPOT_CAROUSEL/) |
 | Aéropostale Really Wear (homepage spot) | [interact/REALLY_WEAR_A_SPOT](https://rirenakpodia.github.io/interact/REALLY_WEAR_A_SPOT/really-wear.html) | [interact-responsive/REALLY_WEAR_A_SPOT](https://rirenakpodia.github.io/interact-responsive/REALLY_WEAR_A_SPOT/) |
 | Aéropostale Responsive Homepage (Clearance + Tees/Shorts) | [interact/RESPONSIVE-HP](https://rirenakpodia.github.io/interact/RESPONSIVE-HP/responsize-hp.html) | [interact-responsive/RESPONSIVE-HP](https://rirenakpodia.github.io/interact-responsive/RESPONSIVE-HP/) |
+| Aéropostale Black Friday Skybanner | [interact/SKYBANNER](https://rirenakpodia.github.io/interact/SKYBANNER/test-drop-2.html) | [interact-responsive/SKYBANNER](https://rirenakpodia.github.io/interact-responsive/SKYBANNER/) |
 
 Images in the rebuilds were AI upscaled (Real-ESRGAN) from the original web assets. Where copy was baked into an image, it was removed and reset as live text.

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aéropostale: Black Friday Skybanner</title>
+<!-- Gotham via Rire's Adobe Fonts web project "interact-responsive (Gotham)" -->
+<link rel="stylesheet" href="https://use.typekit.net/sza7zys.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; background: #fff; }
+  body { font-family: "gotham", Helvetica, Arial, sans-serif; color: #111; -webkit-font-smoothing: antialiased; }
+  @media (min-width: 980px) { html, body { background: #f4f4f2; } body { padding: 40px 24px; } }
+
+  .wrap { container-type: inline-size; width: 100%; max-width: 960px; margin: 0 auto; padding-bottom: 22px; background: #fff; }
+  @media (min-width: 980px) { .wrap { padding: 24px 24px 22px; box-shadow: 0 2px 24px rgba(0,0,0,.08); } }
+  .credit { text-align: center; font-size: 11px; color: #888; margin: 16px 16px 0; }
+  .red { color: #d4202e; }
+
+  .sky { background: #efefef; }
+  .bar { display: block; width: 100%; padding: 0; border: 0; background: #efefef; cursor: pointer; text-align: center; font: inherit; color: inherit; }
+  .bar img { display: none; width: 100%; height: auto; }
+
+  /* Phone: the bar as live text */
+  .bar .live { display: grid; }
+  .bar .o { padding: 12px 14px; text-transform: uppercase; font-size: 11px; letter-spacing: .04em; line-height: 1.45; border-bottom: 1px solid #ddd; }
+  .bar .o b { font-weight: 700; }
+  .bar .o .big { display: block; font-size: 15px; font-weight: 700; letter-spacing: .02em; margin: 1px 0; }
+  .bar .cards { display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 3px; }
+  .bar .cards span { display: block; }
+  .bar .o.ship { background: #000; color: #fff; border: 0; font-size: 13px; }
+
+  .tabrow { text-align: center; background: #fff; }
+  .tab { font: inherit; font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #fff; background: #d4202e; border: 0; padding: 7px 16px 8px; cursor: pointer; }
+  .tab::after { content: " +"; }
+  .open .tab::after { content: " \2013"; }
+
+  .pane { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .6s ease; background: #efefef; }
+  .open .pane { grid-template-rows: 1fr; }
+  .pane > div { overflow: hidden; }
+  .pane img { display: block; height: auto; }
+  .pane .full { display: none; width: 100%; }
+  .pane .parts img { width: 100%; max-width: 420px; margin: 0 auto; }
+  .pane .parts img + img { border-top: 1px solid #ddd; }
+  .pane .parts img.p3 { width: 64%; }
+  .open .pane > div { border-bottom: 1px solid #ccc; }
+
+  /* Wider: the original image bar and panel */
+  @container (min-width: 760px) {
+    .bar img { display: block; }
+    .bar .live { display: none; }
+    .pane .full { display: block; }
+    .pane .parts { display: none; }
+    .tabrow { text-align: right; }
+    .tab { font-size: 10px; padding: 5px 14px 6px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .pane { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="sky">
+    <button class="bar" aria-expanded="false" aria-controls="pane">
+      <img src="img/bar.webp" alt="Online only! Extra 40% off clearance, online use code EXTRA40. Black Friday Dollars: $20 cash card when you spend $80 online, or $10 cash card when you spend $40 in stores. Free shipping on $50.">
+      <span class="live" aria-hidden="true">
+        <span class="o">Online only!<span class="big red">Extra 40% off clearance</span>Online use code <b>EXTRA40</b></span>
+        <span class="o"><b>Black Friday Dollars</b>
+          <span class="cards"><span><span class="big red">$20 cash card</span>Spend $80 online</span><b>or</b><span><span class="big red">$10 cash card</span>Spend $40 in stores</span></span></span>
+        <span class="o ship"><b>Free shipping</b> on $50</span>
+      </span>
+    </button>
+    <div class="tabrow"><button class="tab" aria-controls="pane">Details</button></div>
+    <div class="pane" id="pane">
+      <div>
+        <img class="full" src="img/panel.webp" alt="Online and in store: extra 40% off clearance with code EXTRA40. $20 cash card when you spend $80 online, or $10 cash card when you spend $40 in stores. Free shipping on $75.">
+        <div class="parts">
+          <img src="img/p1.webp" alt="Online and in store! Extra 40% off clearance. Online use code EXTRA40.">
+          <img src="img/p2.webp" alt="$20 cash card when you spend $80 online, or $10 cash card when you spend $40 in stores. While supplies last.">
+          <img class="p3" src="img/p3.webp" alt="Free shipping on $75">
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="credit">Creative and Art Direction by Rire Nakpodia. Originally designed and built for Aéropostale.</p>
+</div>
+<script>
+  // The bar (or the Details tab) opens and closes the full offer panel
+  const sky = document.querySelector(".sky"), bar = document.querySelector(".bar");
+  let touched = false;
+  const set = open => { sky.classList.toggle("open", open); bar.setAttribute("aria-expanded", open); };
+  document.querySelectorAll(".bar, .tab").forEach(b => b.addEventListener("click", () => { touched = true; set(!sky.classList.contains("open")); }));
+  // In the portfolio it opens once on its own so the panel is seen
+  setTimeout(() => { if (!touched) set(true); }, 1500);
+
+  const report = () => parent !== window && parent.postMessage({ type: "lookbook-height", height: document.documentElement.scrollHeight }, "*");
+  new ResizeObserver(report).observe(document.body);
+</script>
+</body>
+</html>
