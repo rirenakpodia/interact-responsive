@@ -28,6 +28,7 @@ The original desktop-era versions live in [rirenakpodia/interact](https://github
 | Aéropostale Friends & Family | [interact/FRIENDS_AND_FAMILY](https://rirenakpodia.github.io/interact/FRIENDS_AND_FAMILY/friends-and-family.html) | [interact-responsive/FRIENDS_AND_FAMILY](https://rirenakpodia.github.io/interact-responsive/FRIENDS_AND_FAMILY/) |
 | Live Love Dream Swim 2016 | [interact/LLD_SWIM_FCMS](https://rirenakpodia.github.io/interact/LLD_SWIM_FCMS/test.html) | [interact-responsive/LLD_SWIM_FCMS](https://rirenakpodia.github.io/interact-responsive/LLD_SWIM_FCMS/) |
 | P.S. from Aéropostale Boys Holiday Lookbook | [interact/PS_BOYS_LOOKBOOK](https://rirenakpodia.github.io/interact/PS_BOYS_LOOKBOOK/boys-lookbook.html) | [interact-responsive/PS_BOYS_LOOKBOOK](https://rirenakpodia.github.io/interact-responsive/PS_BOYS_LOOKBOOK/) |
+| P.S. from Aéropostale Girls' Spring 2016 Lookbook | [interact/PS_GIRLS_LOOKBOOK](https://rirenakpodia.github.io/interact/PS_GIRLS_LOOKBOOK/ps-girls-look.html) | [interact-responsive/PS_GIRLS_LOOKBOOK](https://rirenakpodia.github.io/interact-responsive/PS_GIRLS_LOOKBOOK/) |
 | P.S. from Aéropostale Girls Holiday Lookbook (Into the Woods) | [interact/PS_GIRLS_WINTER_LOOK](https://rirenakpodia.github.io/interact/PS_GIRLS_WINTER_LOOK/girls-lookbook.html) | [interact-responsive/PS_GIRLS_WINTER_LOOK](https://rirenakpodia.github.io/interact-responsive/PS_GIRLS_WINTER_LOOK/) |
 
 Images in the rebuilds were AI upscaled (Real-ESRGAN) from the original web assets. Where copy was baked into an image, it was removed and reset as live text.
