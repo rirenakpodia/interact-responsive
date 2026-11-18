@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>P.S. from Aéropostale: Holiday Gift Guide</title>
+<!-- Gotham Light via Rire's Adobe Fonts web project "interact-responsive (Gotham Light)" -->
+<link rel="stylesheet" href="https://use.typekit.net/txx6mha.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; background: #fff; }
+  body { font-family: "gotham-light", Helvetica, Arial, sans-serif; color: #232323; -webkit-font-smoothing: antialiased; }
+  @media (min-width: 980px) { html, body { background: #f4f4f2; } body { padding: 40px 24px; } }
+
+  .wrap { container-type: inline-size; width: 100%; max-width: 960px; margin: 0 auto; padding-bottom: 22px; background: #fff; }
+  @media (min-width: 980px) { .wrap { padding: 24px 24px 22px; box-shadow: 0 2px 24px rgba(0,0,0,.08); } }
+  .credit { text-align: center; font-family: Helvetica, Arial, sans-serif; font-size: 11px; color: #888; margin: 16px 16px 0; }
+
+  .gg { background: #d3e6f6 url(img/snow.gif) center top / 220% auto repeat-y; padding: 20px 10px 14px; }
+  .title { display: block; width: 92%; max-width: 620px; height: auto; margin: 4px auto 18px; }
+
+  /* Phone: two columns */
+  .grid { --cols: 2; --gap: 10px; --cw: calc((100cqi - 20px - var(--gap)) / 2); display: grid; grid-template-columns: repeat(var(--cols), 1fr); grid-auto-rows: calc(var(--cw) * 405 / 346); gap: var(--gap);
+    grid-template-areas: "a1 a2" "a3 a4" "b1 b2" "c1 b2" "b3 b4" "c3 c4" "d3 c4" "d1 d1" "e1 e2" "e3 e3" "f1 f2" "f3 f4"; }
+  .tile { margin: 0; background: #fff; border: 1px solid #e3242b; overflow: hidden; display: flex; flex-direction: column; }
+  .tile img { display: block; width: 100%; height: 100%; object-fit: cover; min-height: 0; }
+  .tile.lab img { flex: 1; }
+  .tile figcaption { flex: 0 0 auto; text-align: center; text-transform: uppercase; font-weight: 300; letter-spacing: .02em; font-size: 11px; line-height: 1.2; padding: 8px 6px 9px; border-top: 1px solid #e3242b; }
+
+  /* Wider: the original four-column grid */
+  @container (min-width: 760px) {
+    .gg { background-size: 140% auto; padding: 2.2cqi 0 0; }
+    .title { width: 63.5%; max-width: none; margin: 0 auto 4.5cqi; }
+    .grid { --cols: 4; --gap: 1.36cqi; --cw: calc((100cqi - 3 * var(--gap)) / 4);
+      grid-template-areas: "a1 a2 a3 a4" "b1 b2 b3 b4" "c1 b2 c3 c4" "d1 d1 d3 c4" "e1 e2 e3 e3" "f1 f2 f3 f4"; }
+    .tile figcaption { font-size: max(10px, 1.3cqi); padding: 1.3cqi 4px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="gg">
+    <h1 style="margin:0"><img class="title" src="img/title.webp" alt="P.S. holiday gift guide"></h1>
+    <div class="grid">
+    <figure class="tile lab" style="grid-area:a1"><img src="img/1-A.webp" alt="Stocking stuffers for girls"><figcaption>Stocking stuffers for girls</figcaption></figure>
+    <figure class="tile lab" style="grid-area:a2"><img src="img/1-B.jpg" alt="For her"><figcaption>For her</figcaption></figure>
+    <figure class="tile" style="grid-area:a3"><img src="img/1-C.webp" alt="Red wool pea coat with a cream knit scarf"></figure>
+    <figure class="tile lab" style="grid-area:a4"><img src="img/1-D.jpg" alt="For him"><figcaption>For him</figcaption></figure>
+    <figure class="tile lab" style="grid-area:b1"><img src="img/2-A.jpg" alt="Gifts under $10 for boys"><figcaption>Gifts under $10 for boys</figcaption></figure>
+    <figure class="tile lab" style="grid-area:b2"><img src="img/2-B.jpg" alt="Our faves for girls"><figcaption>Our faves for girls</figcaption></figure>
+    <figure class="tile lab" style="grid-area:b3"><img src="img/2-C.jpg" alt="Gifts under $10 for girls"><figcaption>Gifts under $10 for girls</figcaption></figure>
+    <figure class="tile lab" style="grid-area:b4"><img src="img/2-D.jpg" alt="Our faves for boys"><figcaption>Our faves for boys</figcaption></figure>
+    <figure class="tile" style="grid-area:c1"><img src="img/3-A.webp" alt="Boys' plaid flannel shirt"></figure>
+    <figure class="tile lab" style="grid-area:c3"><img src="img/3-B.webp" alt="Gifts under $20 for girls"><figcaption>Gifts under $20 for girls</figcaption></figure>
+    <figure class="tile lab" style="grid-area:c4"><img src="img/3-C.jpg" alt="Gifts under $20 for boys"><figcaption>Gifts under $20 for boys</figcaption></figure>
+    <figure class="tile lab" style="grid-area:d1"><img src="img/4-A.jpg" alt="Shop by outfits for girls"><figcaption>Shop by outfits for girls</figcaption></figure>
+    <figure class="tile lab" style="grid-area:d3"><img src="img/4-B.jpg" alt="Gift card"><figcaption>Gift card</figcaption></figure>
+    <figure class="tile" style="grid-area:e1"><img src="img/5-A.webp" alt="Red sweater with a faux fur hooded vest"></figure>
+    <figure class="tile lab" style="grid-area:e2"><img src="img/5-B.webp" alt="Stocking stuffers for boys"><figcaption>Stocking stuffers for boys</figcaption></figure>
+    <figure class="tile lab" style="grid-area:e3"><img src="img/5-C.jpg" alt="Shop by outfits for boys"><figcaption>Shop by outfits for boys</figcaption></figure>
+    <figure class="tile" style="grid-area:f1"><img src="img/6-A.jpg" alt="Fair isle hoodie and jogger set with slippers"></figure>
+    <figure class="tile" style="grid-area:f2"><img src="img/6-B.webp" alt="Light blue graphic long-sleeve tee"></figure>
+    <figure class="tile" style="grid-area:f3"><img src="img/6-C.jpg" alt="Girl in a red coat and leopard beanie with a gift"></figure>
+    <figure class="tile" style="grid-area:f4"><img src="img/6-D.jpg" alt="Purple polar bear sleep tee and pajama pants"></figure>
+    </div>
+  </div>
+  <p class="credit">Creative and Art Direction by Rire Nakpodia. Originally designed and built for P.S. from Aéropostale.</p>
+</div>
+<script>
+  const report = () => parent !== window && parent.postMessage({ type: "lookbook-height", height: document.documentElement.scrollHeight }, "*");
+  new ResizeObserver(report).observe(document.body);
+</script>
+</body>
+</html>
