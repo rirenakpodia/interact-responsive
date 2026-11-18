@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live Love Dream: Swim 2016</title>
+<!-- Gotham via Rire's Adobe Fonts web projects "interact-responsive (Gotham)" and "(Gotham Light)" -->
+<link rel="stylesheet" href="https://use.typekit.net/sza7zys.css">
+<link rel="stylesheet" href="https://use.typekit.net/txx6mha.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; background: #fff; }
+  body { font-family: "gotham", Helvetica, Arial, sans-serif; color: #111; -webkit-font-smoothing: antialiased; }
+  @media (min-width: 980px) { html, body { background: #f4f4f2; } body { padding: 40px 24px; } }
+
+  .wrap { container-type: inline-size; width: 100%; max-width: 960px; margin: 0 auto; padding-bottom: 22px; background: #fff; }
+  @media (min-width: 980px) { .wrap { padding: 24px 24px 22px; box-shadow: 0 2px 24px rgba(0,0,0,.08); } }
+  .credit { text-align: center; font-size: 11px; color: #888; margin: 16px 16px 0; }
+
+  .lld { display: flex; flex-direction: column; }
+  .stage { display: contents; }
+  .hero { order: 1; } .bar { order: 2; } .panel { order: 3; }
+  .hero { display: block; width: 100%; height: auto; aspect-ratio: 911 / 755; }
+
+  /* Pink "dive in" bar */
+  .bar { display: block; position: relative; z-index: 3; width: 100%; padding: 0; border: 0; cursor: pointer; background: #e43881 url(img/pink.jpg) left center / auto 100% repeat-x; color: #fff; font: inherit; }
+  .bar img { display: none; width: 100%; height: auto; }
+  .bar .live { display: flex; align-items: center; justify-content: center; gap: 10px; height: 46px; font-family: "gotham-light", "gotham", Helvetica, Arial, sans-serif; font-weight: 300; text-transform: uppercase; letter-spacing: .05em; font-size: 15px; }
+  .bar .chev { width: 10px; height: 10px; border: solid #fff; border-width: 0 2px 2px 0; transform: translateY(-2px) rotate(45deg); transition: transform .3s; }
+  .open .bar .chev { transform: translateY(2px) rotate(-135deg); }
+
+  /* Phone: the fits open below the bar as swipe cards */
+  .panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .8s ease; background: #e9dcc4; }
+  .open .panel { grid-template-rows: 1fr; }
+  .panel > .inner { overflow: hidden; position: relative; }
+  .track { display: grid; grid-auto-flow: column; grid-auto-columns: 86%; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 12px; scroll-padding: 0 12px; scrollbar-width: none; overscroll-behavior-x: contain; }
+  .track::-webkit-scrollbar { display: none; }
+  .slide { scroll-snap-align: start; }
+  .slide img { display: block; width: 100%; height: auto; aspect-ratio: 622 / 610; object-fit: cover; object-position: 48% 50%; }
+  .arrow, .tabbtn { display: none; }
+
+  /* Wider: the original, the fits panel rising over the hero */
+  @container (min-width: 760px) {
+    .lld { display: block; }
+    .stage { display: block; position: relative; overflow: hidden; }
+    .panel { display: block; position: absolute; z-index: 2; left: 5.38%; top: 6.9%; width: 89.1%; height: 86.2%; background: #e9dcc4; transform: translateY(120%); transition: transform 1s ease; }
+    .open .panel { transform: none; }
+    .panel > .inner { height: 100%; }
+    .track { display: flex; height: 100%; padding: 0; gap: 0; overflow: visible; scroll-snap-type: none; transition: transform .5s ease; }
+    .slide { flex: 0 0 100%; }
+    .slide img { height: 100%; aspect-ratio: auto; object-fit: fill; }
+    .arrow { display: grid; place-items: center; position: absolute; z-index: 2; top: 45.6%; width: 40px; height: 40px; padding: 0 0 3px; border-radius: 50%; border: 0; background: rgba(255,255,255,.85); box-shadow: 0 1px 5px rgba(0,0,0,.18); font-size: 24px; line-height: 1; color: #e43881; cursor: pointer; opacity: .85; }
+    .arrow:hover { opacity: 1; }
+    .arrow.prev { left: 10px; } .arrow.next { right: 10px; }
+    .bar { margin-top: -3.07%; background: none; }
+    .bar .live { display: none; }
+    .bar img.up { display: block; }
+    .open .bar img.up { display: none; } .open .bar img.down { display: block; }
+  }
+  @media (prefers-reduced-motion: reduce) { .panel, .track { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="lld">
+    <div class="stage">
+      <img class="hero" src="img/hero.jpg" alt="Swim 2016: Things are heating up. Three friends in printed bikinis by the water.">
+      <div class="panel" id="fits">
+        <div class="inner">
+          <div class="track">
+            <div class="slide"><img src="img/fits1.jpg" alt="The Flounce and The Bandeau tops; The Bikini and The Cheeky bottoms"></div>
+            <div class="slide"><img src="img/fits2.jpg" alt="The Highneck and The Push-Up tops; The Hipster and The Bikini bottoms"></div>
+            <div class="slide"><img src="img/fits3.jpg" alt="The Halter and The Crochet Back tops; The Keyhole and The Cheeky bottoms"></div>
+          </div>
+          <button class="arrow prev" aria-label="Previous fits">&#8249;</button>
+          <button class="arrow next" aria-label="Next fits">&#8250;</button>
+        </div>
+      </div>
+    </div>
+    <button class="bar" aria-expanded="false" aria-controls="fits">
+      <img class="up" src="img/bar-up.webp" alt="Dive in: see all our fits">
+      <img class="down" src="img/bar-down.webp" alt="Hide the fits">
+      <span class="live">Dive in. See all our fits <span class="chev" aria-hidden="true"></span></span>
+    </button>
+  </div>
+  <p class="credit">Creative and Art Direction by Rire Nakpodia. Originally designed and built for Aéropostale.</p>
+</div>
+<script>
+  const lld = document.querySelector(".lld"), bar = document.querySelector(".bar"), track = document.querySelector(".track"), wrap = document.querySelector(".wrap");
+  const setOpen = o => { lld.classList.toggle("open", o); bar.setAttribute("aria-expanded", o); };
+  let touched = false;
+  bar.addEventListener("click", () => { touched = true; setOpen(!lld.classList.contains("open")); });
+  // Like the original, the fits rise into view a moment after the page loads
+  setTimeout(() => { if (!touched) setOpen(true); }, 1500);
+
+  // Desktop: the three fits slides advance every 4 seconds until someone takes over
+  let idx = 0, timer;
+  const go = i => { idx = (i + 3) % 3; track.style.transform = wrap.clientWidth < 760 ? "" : `translateX(${-idx * 100}%)`; };
+  const stop = () => clearInterval(timer);
+  timer = setInterval(() => { if (lld.classList.contains("open")) go(idx + 1); }, 4000);
+  document.querySelector(".prev").onclick = () => { stop(); go(idx - 1); };
+  document.querySelector(".next").onclick = () => { stop(); go(idx + 1); };
+  new ResizeObserver(() => go(idx)).observe(wrap);
+
+  const report = () => parent !== window && parent.postMessage({ type: "lookbook-height", height: document.documentElement.scrollHeight }, "*");
+  new ResizeObserver(report).observe(document.body);
+</script>
+</body>
+</html>
