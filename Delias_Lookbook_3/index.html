@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Delia's: Get the Look</title>
+<!-- Gotham Light and Bold via Rire's Adobe Fonts web project "interact-responsive (Gotham Light)" -->
+<link rel="stylesheet" href="https://use.typekit.net/txx6mha.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; background: #fff; }
+  body { font-family: "gotham", Helvetica, Arial, sans-serif; color: #222; -webkit-font-smoothing: antialiased; }
+  @media (min-width: 980px) { html, body { background: #f4f4f2; } body { padding: 40px 24px; } }
+
+  .lookbook { container-type: inline-size; width: 100%; max-width: 960px; margin: 0 auto; padding-bottom: 22px; background: #fff; }
+  @media (min-width: 980px) { .lookbook { padding: 24px 24px 22px; box-shadow: 0 2px 24px rgba(0,0,0,.08); } }
+
+  .frame { position: relative; }
+
+  /* Cover: a collage whose photos swap at random, with the "Get the Look" title */
+  .cover { position: relative; aspect-ratio: 797 / 475; overflow: hidden; background: #f6c5d0; }
+  .cover img { position: absolute; display: block; height: auto; }
+  .cover .bg { inset: 0; width: 100%; height: 100%; }
+  .cover .b { opacity: 0; transition: opacity .8s ease; }
+  .cover .b.on { opacity: 1; }
+  .cover .title { left: 18.2%; top: 44.4%; width: 64.4%; cursor: pointer; z-index: 3; }
+  .cover button.open { position: absolute; left: 18.2%; top: 44.4%; width: 64.4%; height: 21.3%; z-index: 4; border: 0; background: transparent; cursor: pointer; }
+
+  /* Looks: phones get one look per card with the name below */
+  .stage { position: relative; margin-top: 16px; }
+  .track { display: grid; grid-auto-flow: column; grid-auto-columns: 74%; gap: 10px; padding: 0 16px; scroll-padding: 0 16px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; }
+  .track::-webkit-scrollbar { display: none; }
+  .look { scroll-snap-align: start; margin: 0; }
+  .photo { position: relative; aspect-ratio: 2 / 3; overflow: hidden; background: #f6c5d0; container-type: inline-size; }
+  .photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+  .name { margin: 12px 2px 0; font-weight: 300; font-size: 22px; line-height: 1.05; letter-spacing: .04em; text-transform: uppercase; }
+  .name br { display: none; }
+  .spread { display: none; }
+
+  .arrow { display: none; position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border: 0; border-radius: 50%; background: rgba(255,255,255,.9); color: #111; font-size: 22px; cursor: pointer; box-shadow: 0 1px 6px rgba(0,0,0,.2); z-index: 5; }
+  .arrow.prev { left: 10px; } .arrow.next { right: 10px; }
+  .dots { display: flex; justify-content: center; flex-wrap: wrap; gap: 7px; padding: 14px 16px 0; }
+  .dots button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 50%; background: #c9b3b9; cursor: pointer; }
+  .dots button[aria-current="true"] { background: #222; width: 22px; border-radius: 4px; }
+  .note { text-align: center; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #666; margin: 10px 0 0; }
+  .credit { text-align: center; font-size: 11px; color: #888; margin: 14px 16px 0; }
+
+  /* Desktop: the original. The cover sits over the slider until "view the looks" is clicked, then spreads slide with the names set live */
+  @container (min-width: 760px) {
+    .frame { aspect-ratio: 798 / 475; overflow: hidden; }
+    .cover { position: absolute; inset: 0; z-index: 6; transition: opacity .6s ease, visibility .6s; }
+    .frame.open .cover { opacity: 0; visibility: hidden; }
+    .stage { position: absolute; inset: 0; margin: 0; }
+    .track { grid-auto-columns: 100%; gap: 0; padding: 0; scroll-padding: 0; height: 100%; }
+    .look.single { display: none; }
+    .spread { display: block; position: relative; }
+    .spread .photo { aspect-ratio: 798 / 475; }
+    .spread .name { position: absolute; margin: 0; left: var(--x); top: var(--y); font-size: 3.85cqw; letter-spacing: .03em; color: #2b2b2b; }
+    .spread .name br { display: inline; }
+    .arrow { display: block; }
+    .note { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .track { scroll-behavior: auto; } .cover .b, .cover { transition: none; } }
+</style>
+</head>
+<body>
+<section class="lookbook" aria-label="Delia's Get the Look lookbook">
+  <div class="frame" id="frame">
+    <div class="cover" id="cover">
+      <img class="bg" src="img/g_static.jpg" alt="Collage of looks from the Delia's lookbook">
+      <button class="open" id="open" aria-label="View the looks"></button>
+      <img class="title" src="img/title.png" alt="Get the look. View the looks">
+    </div>
+    <div class="stage">
+      <button class="arrow prev" aria-label="Previous look">&#8249;</button>
+      <div class="track" id="track"></div>
+      <button class="arrow next" aria-label="Next look">&#8250;</button>
+    </div>
+  </div>
+  <div class="dots" id="dots" aria-label="Choose a look"></div>
+  <p class="note">Swipe for more looks</p>
+  <p class="credit">Creative and Art Direction by Rire Nakpodia. Originally designed and built for Delia's.</p>
+</section>
+
+<script>
+  // Collage tiles (left, top, width as % of the 797 x 475 cover). The "b" photos fade in and out over the "a" photos.
+  const tiles = { a5:[516,0,282], a4:[330,0,186], a3:[653,312,145], a2:[191,0,140], a1:[0,275,191],
+                  b5:[516,0,282], b3:[655,312,141], b2:[189,-2,142], b1:[0,275,191], b4:[330,0,186] };
+  const cover = document.getElementById("cover");
+  const titleImg = cover.querySelector(".title");
+  Object.entries(tiles).forEach(([k, [x, y, w]]) => {
+    const im = document.createElement("img");
+    im.src = `img/g_${k}.jpg`; im.alt = ""; if (k[0] === "b") im.className = "b";
+    im.style.cssText = `left:${x / 7.97}%;top:${y / 4.75}%;width:${w / 7.97}%`;
+    cover.insertBefore(im, document.getElementById("open"));
+  });
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    cover.querySelectorAll(".b").forEach(el => {
+      const cycle = () => { el.classList.toggle("on"); setTimeout(cycle, 2800 + Math.random() * 4000); };
+      setTimeout(cycle, 2000 + Math.random() * 4000);
+    });
+  }
+
+  // Looks: name, where the name sat on the spread (x, y as %)
+  const looks = [
+    ["New York<br>City Girl", 28.6, 42.1], ["The New<br>Neutrals", 41.6, 42.1], ["Woke Up<br>Like This", 28.1, 47],
+    ["Teen Spirit", 49.6, 47], ["Coat<br>Tales", 37.6, 44.2], ["Layer It On", 52.4, 13.3],
+    ["Silver<br>Lining", 40.1, 53.3], ["Gone<br>Shooting", 45.9, 44.8], ["Fashion<br>Royalty", 38.1, 42.3],
+    ["Flutter<br>So Fly", 52.9, 39.4], ["In The<br>Hood", 34.1, 42.3], ["Plaid<br>Radness", 50.4, 40.2]
+  ];
+  const track = document.getElementById("track");
+  const plain = s => s.replace(/<br>/g, " ");
+  looks.forEach(([name, x, y], i) => {
+    const src = `img/g_s${String(i + 1).padStart(2, "0")}.jpg`;
+    // wide screens: the whole spread
+    const s = document.createElement("figure");
+    s.className = "look spread"; s.style.cssText = `--x:${x}%;--y:${y}%`;
+    s.innerHTML = `<div class="photo"><img src="${src}" alt="${plain(name)}: two views of the look" loading="lazy"></div><figcaption class="name">${name}</figcaption>`;
+    track.appendChild(s);
+    // phones: each half of the spread on its own
+    [0, 100].forEach((p, h) => {
+      const f = document.createElement("figure");
+      f.className = "look single";
+      f.innerHTML = `<div class="photo"><img src="${src}" alt="${plain(name)}, ${h ? "second" : "first"} view" loading="lazy" style="object-position:${p}% 50%"></div><figcaption class="name">${plain(name)}</figcaption>`;
+      track.appendChild(f);
+    });
+  });
+
+  const frame = document.getElementById("frame");
+  const dots = document.getElementById("dots");
+  const items = () => [...track.children].filter(c => getComputedStyle(c).display !== "none");
+  const step = () => { const v = items(); return v.length > 1 ? v[1].offsetLeft - v[0].offsetLeft : track.clientWidth; };
+  const current = () => Math.min(items().length - 1, Math.round(track.scrollLeft / step()));
+  function goTo(i) { const v = items(); i = (i + v.length) % v.length; track.scrollTo({ left: v[i].offsetLeft - v[0].offsetLeft, behavior: "smooth" }); }
+  function build() {
+    dots.innerHTML = "";
+    items().forEach((_, i) => { const b = document.createElement("button"); b.setAttribute("aria-label", "Look " + (i + 1)); b.addEventListener("click", () => { open(); stop(); goTo(i); }); dots.appendChild(b); });
+    sync();
+  }
+  function sync() { const p = current(); [...dots.children].forEach((d, i) => d.setAttribute("aria-current", i === p)); }
+  track.addEventListener("scroll", () => requestAnimationFrame(sync), { passive: true });
+  new ResizeObserver(build).observe(track);
+
+  // Opening the looks: on desktop the cover fades away and the spreads start cycling; on phones it scrolls down to the looks
+  let auto = null;
+  const stop = () => { clearInterval(auto); auto = null; };
+  function open() {
+    if (frame.classList.contains("open")) return;
+    frame.classList.add("open");
+    if (track.clientWidth >= 700 && !matchMedia("(prefers-reduced-motion: reduce)").matches) auto = setInterval(() => goTo(current() + 1), 3000);
+  }
+  const openClick = () => { if (track.clientWidth >= 700) open(); else track.scrollIntoView({ behavior: "smooth", block: "center" }); };
+  document.getElementById("open").addEventListener("click", openClick);
+  titleImg.addEventListener("click", openClick);
+  ["pointerdown", "wheel", "touchstart"].forEach(ev => track.addEventListener(ev, stop, { passive: true }));
+  document.querySelector(".arrow.prev").addEventListener("click", () => { stop(); goTo(current() - 1); });
+  document.querySelector(".arrow.next").addEventListener("click", () => { stop(); goTo(current() + 1); });
+  document.addEventListener("keydown", e => { if (!frame.classList.contains("open") && track.clientWidth >= 700) return; if (e.key === "ArrowRight") { stop(); goTo(current() + 1); } if (e.key === "ArrowLeft") { stop(); goTo(current() - 1); } });
+
+  const report = () => parent !== window && parent.postMessage({ type: "lookbook-height", height: document.documentElement.scrollHeight }, "*");
+  new ResizeObserver(report).observe(document.body);
+</script>
+</body>
+</html>

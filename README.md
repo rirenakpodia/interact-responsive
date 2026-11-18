@@ -14,5 +14,6 @@ The original desktop-era versions live in [rirenakpodia/interact](https://github
 | Aéropostale Swim: Mix It. Match It. Love It. | [interact/Aero_Swim_2](https://rirenakpodia.github.io/interact/Aero_Swim_2/) | [interact-responsive/Aero_Swim_2](https://rirenakpodia.github.io/interact-responsive/Aero_Swim_2/) |
 | Aéropostale Bethany Mota: The Final Collection | [interact/Bethany_1](https://rirenakpodia.github.io/interact/Bethany_1/index.html) (same as BETHANY_FINAL_COLLECTION) | [interact-responsive/Bethany_1](https://rirenakpodia.github.io/interact-responsive/Bethany_1/) |
 | Aéropostale Bethany Mota: Destination Spring Escape | [interact/Bethany_3](https://rirenakpodia.github.io/interact/Bethany_3/index.html) (same as BETHANY_SLIDER) | [interact-responsive/Bethany_3](https://rirenakpodia.github.io/interact-responsive/Bethany_3/) |
+| Delia's Get the Look | [interact/Delias_Lookbook_3](https://rirenakpodia.github.io/interact/Delias_Lookbook_3/index.html) | [interact-responsive/Delias_Lookbook_3](https://rirenakpodia.github.io/interact-responsive/Delias_Lookbook_3/) |
 
 Images in the rebuilds were AI upscaled (Real-ESRGAN) from the original web assets. Where copy was baked into an image, it was removed and reset as live text.
