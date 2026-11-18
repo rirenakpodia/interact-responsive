@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Delia's: November Lookbook</title>
+<!-- Gotham via Rire's Adobe Fonts web project "interact-responsive (Gotham)" -->
+<link rel="stylesheet" href="https://use.typekit.net/sza7zys.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; background: #fff; }
+  body { font-family: "gotham", Helvetica, Arial, sans-serif; color: #222; -webkit-font-smoothing: antialiased; }
+  @media (min-width: 980px) { html, body { background: #f4f4f2; } body { padding: 40px 24px; } }
+
+  .lookbook { container-type: inline-size; width: 100%; max-width: 960px; margin: 0 auto; padding-bottom: 22px; background: #fff; }
+  @media (min-width: 980px) { .lookbook { padding: 24px 24px 22px; box-shadow: 0 2px 24px rgba(0,0,0,.08); } }
+
+  /* The stage: polka-dot backdrop with each look built from layers, as in the original */
+  .stage { position: relative; aspect-ratio: 798 / 600; overflow: hidden; background: #6f6f6f url("img/bg.jpg") center / cover no-repeat; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+  .look { position: absolute; inset: 0; pointer-events: none; }
+  .layer { position: absolute; height: auto; display: block; opacity: 0; transition: opacity .6s ease; }
+  .look.is-in .model { opacity: 1; }
+  .look.is-in .model.m2 { transition-delay: .2s; }
+  .look .circle, .look .copy { transition: opacity .4s ease; }
+  .look.is-in .circle, .look.is-in .copy { animation: float-in 2.1s cubic-bezier(.22,1.6,.36,1) both; animation-delay: var(--d, .4s); }
+  @keyframes float-in { from { opacity: 0; transform: translate(var(--dx), var(--dy)); } 18% { opacity: 1; } to { opacity: 1; transform: none; } }
+
+  .arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border: 0; border-radius: 50%; background: rgba(255,255,255,.88); color: #111; font-size: 21px; cursor: pointer; box-shadow: 0 1px 6px rgba(0,0,0,.25); z-index: 20; }
+  .arrow.prev { left: 8px; } .arrow.next { right: 8px; }
+
+  /* Phones: the small copy circles are hard to read, so the copy is set below the stage instead */
+  .caption { margin: 14px 16px 0; min-height: 76px; }
+  .caption h2 { margin: 0 0 6px; font-weight: 700; font-size: 18px; letter-spacing: .04em; text-transform: uppercase; }
+  .caption p { margin: 0; font-size: 15px; line-height: 1.45; color: #444; }
+  .copy { display: none; }
+
+  .dots { display: flex; justify-content: center; gap: 8px; padding-top: 14px; }
+  .dots button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 50%; background: #b5b5b5; cursor: pointer; }
+  .dots button[aria-current="true"] { background: #222; width: 22px; border-radius: 4px; }
+  .note { text-align: center; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #666; margin: 10px 0 0; }
+  .credit { text-align: center; font-size: 11px; color: #888; margin: 14px 16px 0; }
+
+  @container (min-width: 700px) {
+    .copy { display: block; }
+    .caption { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); margin: 0; min-height: 0; }
+    .note { display: none; }
+    .arrow { width: 44px; height: 44px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .layer { transition: none; } .look.is-in .circle, .look.is-in .copy { animation: none; opacity: 1; } }
+</style>
+</head>
+<body>
+<section class="lookbook" aria-label="Delia's November lookbook">
+  <div class="stage" id="stage" aria-live="polite">
+    <button class="arrow prev" aria-label="Previous look">&#8249;</button>
+    <button class="arrow next" aria-label="Next look">&#8250;</button>
+  </div>
+  <div class="caption" id="caption"></div>
+  <div class="dots" id="dots" aria-label="Choose a look"></div>
+  <p class="note">Swipe or tap the arrows for more looks</p>
+  <p class="credit">Creative and Art Direction by Rire Nakpodia. Originally designed and built for Delia's.</p>
+</section>
+
+<script>
+  const layers = [[{"k": "ellipse1", "f": "img/ellipse1.webp", "x": 66.04, "y": 66.167, "w": 13.91, "r": "circle"}, {"k": "sochill", "f": "img/sochill.webp", "x": 41.353, "y": 3.5, "w": 33.96, "r": "circle"}, {"k": "right1", "f": "img/right1.webp", "x": 71.679, "y": 0.0, "w": 28.321, "r": "model"}, {"k": "left1", "f": "img/left1.webp", "x": 0.0, "y": 0.0, "w": 49.499, "r": "model"}, {"k": "copy1", "f": "img/copy1.webp", "x": -5.514, "y": 66.0, "w": 35.088, "r": "copy"}], [{"k": "ellipse22", "f": "img/ellipse22.webp", "x": 49.248, "y": -7.667, "w": 18.296, "r": "circle"}, {"k": "ellipse21", "f": "img/ellipse21.webp", "x": 3.509, "y": 79.333, "w": 22.932, "r": "circle"}, {"k": "right2", "f": "img/right2.webp", "x": 43.86, "y": -8.333, "w": 65.038, "r": "model"}, {"k": "copy2", "f": "img/copy2.webp", "x": 30.952, "y": 47.5, "w": 33.459, "r": "copy"}, {"k": "left2", "f": "img/left2.webp", "x": 3.759, "y": 0.333, "w": 37.343, "r": "model"}], [{"k": "left3", "f": "img/left3.webp", "x": -1.128, "y": -8.0, "w": 59.148, "r": "model"}, {"k": "cozy", "f": "img/cozy.webp", "x": 43.358, "y": 21.833, "w": 35.213, "r": "circle"}, {"k": "right3", "f": "img/right3.webp", "x": 69.048, "y": 0.0, "w": 72.682, "r": "model"}, {"k": "copy3", "f": "img/copy3.webp", "x": 4.01, "y": 76.167, "w": 26.942, "r": "copy"}], [{"k": "ellipse41", "f": "img/ellipse41.webp", "x": 50.501, "y": 43.5, "w": 17.043, "r": "circle"}, {"k": "right4", "f": "img/right4.webp", "x": 54.887, "y": -8.333, "w": 50.0, "r": "model"}, {"k": "left4", "f": "img/left4.webp", "x": 14.16, "y": -3.167, "w": 33.333, "r": "model"}, {"k": "ellipse42", "f": "img/ellipse42.webp", "x": 44.612, "y": 88.167, "w": 22.932, "r": "circle"}, {"k": "copy4", "f": "img/copy4.webp", "x": -3.885, "y": 24.333, "w": 33.459, "r": "copy"}], [{"k": "ellipse5", "f": "img/ellipse5.webp", "x": 29.449, "y": -8.0, "w": 15.163, "r": "circle"}, {"k": "left5", "f": "img/left5.webp", "x": -3.133, "y": -3.0, "w": 53.383, "r": "model"}, {"k": "xoxo", "f": "img/xoxo.webp", "x": 50.877, "y": 16.167, "w": 48.371, "r": "circle"}, {"k": "righ5", "f": "img/righ5.webp", "x": 59.524, "y": -1.333, "w": 46.115, "r": "model"}, {"k": "copy5", "f": "img/copy5.webp", "x": 28.321, "y": 71.5, "w": 34.461, "r": "copy"}], [{"k": "ellipse6", "f": "img/ellipse6.webp", "x": -2.381, "y": 19.667, "w": 22.932, "r": "circle"}, {"k": "left6", "f": "img/left6.webp", "x": 3.133, "y": -0.833, "w": 70.301, "r": "model"}, {"k": "righ6", "f": "img/righ6.webp", "x": 10.902, "y": -34.667, "w": 123.308, "r": "model"}, {"k": "copy6", "f": "img/copy6.webp", "x": 32.456, "y": 54.333, "w": 29.198, "r": "copy"}]];
+  const copy = [
+    ["", "Perfect plaids, soft greys and a splash of sequins.", "So Chill: red buffalo-check hoodie over a striped tee, with earmuffs"],
+    ["The Grandpa Coat", "The season's it shade and the season's it coat.", "Grey grandpa coat with a buffalo-check scarf"],
+    ["", "Accessories for the most stylish of snow days.", "Cozy: trapper hat and red patterned snood"],
+    ["The Plaid Peacoat", "A festive favorite for every holiday outfit.", "Red buffalo-check hooded peacoat with knit mittens"],
+    ["The Eyelash Cardi", "Silky soft, cropped and so layer-ready.", "White eyelash cardigan with a chunky knit scarf"],
+    ["The Statement Sweatshirt", "Mickey reigns supreme in sequins.", "Grey sequin Mickey sweatshirt with a white cap"]
+  ];
+  const stage = document.getElementById("stage");
+  const caption = document.getElementById("caption");
+  const dots = document.getElementById("dots");
+  const looks = layers.map((lay, i) => {
+    const el = document.createElement("div");
+    el.className = "look"; el.setAttribute("role", "img"); el.setAttribute("aria-label", copy[i][2]);
+    let m = 0, c = 0;
+    lay.forEach(L => {
+      const im = document.createElement("img");
+      im.src = L.f; im.alt = ""; im.className = "layer " + L.r + (L.r === "model" ? " m" + (++m) : "");
+      im.style.cssText = `left:${L.x}%;top:${L.y}%;width:${L.w}%;`;
+      if (L.r !== "model") {
+        // circles drift in from a random spot nearby, with a little bounce, like the original
+        const t = Math.random() * Math.PI * 2, r = 1.2 + Math.random() * 2.4;
+        im.style.setProperty("--dx", (Math.cos(t) * r).toFixed(2) + "cqi");
+        im.style.setProperty("--dy", (Math.sin(t) * r).toFixed(2) + "cqi");
+        im.style.setProperty("--d", (0.35 + 0.15 * c++) + "s");
+      }
+      el.appendChild(im);
+    });
+    stage.insertBefore(el, stage.querySelector(".arrow.next"));
+    const b = document.createElement("button");
+    b.setAttribute("aria-label", "Look " + (i + 1)); b.addEventListener("click", () => { stop(); show(i); });
+    dots.appendChild(b);
+    return el;
+  });
+
+  let cur = -1, busy = false;
+  function show(i) {
+    i = (i + looks.length) % looks.length;
+    if (i === cur || busy) return;
+    busy = true;
+    const prev = looks[cur];
+    if (prev) prev.classList.remove("is-in");
+    cur = i;
+    // let the outgoing look fade before the next one builds in
+    setTimeout(() => { looks[i].classList.add("is-in"); busy = false; }, prev ? 650 : 0);
+    const [h, p] = copy[i];
+    caption.innerHTML = (h ? `<h2>${h}</h2>` : "") + `<p>${p}</p>`;
+    [...dots.children].forEach((d, k) => d.setAttribute("aria-current", k === i));
+  }
+
+  let auto = null;
+  const stop = () => { clearInterval(auto); auto = null; };
+  document.querySelector(".arrow.prev").addEventListener("click", () => { stop(); show(cur - 1); });
+  document.querySelector(".arrow.next").addEventListener("click", () => { stop(); show(cur + 1); });
+  document.addEventListener("keydown", e => { if (e.key === "ArrowRight") { stop(); show(cur + 1); } if (e.key === "ArrowLeft") { stop(); show(cur - 1); } });
+
+  // Swipe on the stage
+  let x0 = null;
+  stage.addEventListener("pointerdown", e => { x0 = e.clientX; });
+  stage.addEventListener("pointerup", e => {
+    if (x0 === null) return; const dx = e.clientX - x0; x0 = null;
+    if (Math.abs(dx) > 40) { stop(); show(cur + (dx < 0 ? 1 : -1)); }
+  });
+
+  // Start when the piece is on screen; then advance every 6 seconds, like the original, until someone takes over
+  const io = new IntersectionObserver(es => {
+    if (!es.some(e => e.isIntersecting)) return;
+    io.disconnect(); show(0);
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches) auto = setInterval(() => show(cur + 1), 6000);
+  }, { threshold: 0.4 });
+  io.observe(stage);
+
+  const report = () => parent !== window && parent.postMessage({ type: "lookbook-height", height: document.documentElement.scrollHeight }, "*");
+  new ResizeObserver(report).observe(document.body);
+</script>
+</body>
+</html>
