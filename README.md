@@ -22,5 +22,6 @@ The original desktop-era versions live in [rirenakpodia/interact](https://github
 | Aéropostale Borrowed from the Boys | [interact/BORROWED_FROM_BOYS_B](https://rirenakpodia.github.io/interact/BORROWED_FROM_BOYS_B/borrowed.html) | [interact-responsive/BORROWED_FROM_BOYS_B](https://rirenakpodia.github.io/interact-responsive/BORROWED_FROM_BOYS_B/) |
 | Aéropostale Homepage Carousel | [interact/D_SPOT_CAROUSEL](https://rirenakpodia.github.io/interact/D_SPOT_CAROUSEL/hp-carosel.html) | [interact-responsive/D_SPOT_CAROUSEL](https://rirenakpodia.github.io/interact-responsive/D_SPOT_CAROUSEL/) |
 | Aéropostale Really Wear (homepage spot) | [interact/REALLY_WEAR_A_SPOT](https://rirenakpodia.github.io/interact/REALLY_WEAR_A_SPOT/really-wear.html) | [interact-responsive/REALLY_WEAR_A_SPOT](https://rirenakpodia.github.io/interact-responsive/REALLY_WEAR_A_SPOT/) |
+| Aéropostale Responsive Homepage (Clearance + Tees/Shorts) | [interact/RESPONSIVE-HP](https://rirenakpodia.github.io/interact/RESPONSIVE-HP/responsize-hp.html) | [interact-responsive/RESPONSIVE-HP](https://rirenakpodia.github.io/interact-responsive/RESPONSIVE-HP/) |
 
 Images in the rebuilds were AI upscaled (Real-ESRGAN) from the original web assets. Where copy was baked into an image, it was removed and reset as live text.

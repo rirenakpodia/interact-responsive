@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aéropostale: Responsive Homepage</title>
+<!-- Gotham via Rire's Adobe Fonts web projects "interact-responsive (Gotham)" and "(Gotham Light)" -->
+<link rel="stylesheet" href="https://use.typekit.net/sza7zys.css">
+<link rel="stylesheet" href="https://use.typekit.net/txx6mha.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; background: #fff; }
+  body { font-family: "gotham", Helvetica, Arial, sans-serif; color: #000; -webkit-font-smoothing: antialiased; }
+  @media (min-width: 980px) { html, body { background: #f4f4f2; } body { padding: 40px 24px; } }
+
+  .wrap { container-type: inline-size; width: 100%; max-width: 960px; margin: 0 auto; padding-bottom: 22px; background: #fff; }
+  @media (min-width: 980px) { .wrap { padding: 24px 24px 22px; box-shadow: 0 2px 24px rgba(0,0,0,.08); } }
+  .credit { text-align: center; font-size: 11px; color: #888; margin: 16px 16px 0; }
+
+  /* ---------- A spot: clearance offer in a teal frame ---------- */
+  .hero { position: relative; aspect-ratio: 4 / 5; background: #2d3a24 url(img/hero.webp) 38% center / cover no-repeat; display: grid; place-items: center; }
+  .hero::after { content: ""; position: absolute; inset: 0; border: 14px solid rgba(0, 137, 150, .81); pointer-events: none; }
+  .hero img { display: block; width: 84%; max-width: 559px; height: auto; }
+
+  /* ---------- B spot: tees and shorts trade places ---------- */
+  .bspot { container-type: inline-size; position: relative; aspect-ratio: 3 / 2; overflow: hidden; margin-top: 28px; background: #eee; }
+  .ban { position: absolute; inset: 0; opacity: 0; transition: opacity 1s ease-in; }
+  .ban.on { opacity: 1; }
+  .ban > img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .ban.tees > img { object-position: 0 100%; }
+  .ban.shorts > img { object-position: 43% 0; }
+  .pp { position: absolute; top: 33%; width: 34%; text-align: center; text-transform: uppercase; color: #000; }
+  .tees .pp { left: 17%; }
+  .shorts .pp { left: 66%; }
+  .pp b { display: block; font-weight: 700; font-size: 6.4cqi; letter-spacing: .03em; }
+  .pp small { display: block; font-size: 2.6cqi; letter-spacing: .08em; margin-top: 1.4cqi; }
+  .pp span { display: block; font-size: 8.6cqi; font-weight: 400; margin-top: 1cqi; letter-spacing: .02em; }
+  .pp span sup { font-size: .42em; vertical-align: .9em; margin-right: .06em; }
+  .pp i { display: block; font-style: normal; font-size: 1.7cqi; letter-spacing: .08em; margin-top: 1cqi; }
+
+  .labels { display: grid; grid-template-columns: 1fr 1fr; margin-top: 16px; }
+  .labels button { font: inherit; background: none; border: 0; padding: 10px 6px; cursor: pointer; text-transform: uppercase; letter-spacing: .03em; font-size: 14px; line-height: 1.3; color: #aaa; transition: color .6s; }
+  .labels button .lt { font-family: "gotham-light", "gotham", Helvetica, Arial, sans-serif; font-weight: 300; }
+  .labels button b { font-weight: 700; }
+  .labels button[aria-pressed="true"] { color: #000; }
+  .labels small { display: block; font-size: 11px; letter-spacing: .08em; margin-top: 3px; }
+
+  /* ---------- Wider: the original homepage proportions ---------- */
+  @container (min-width: 760px) {
+    .hero { aspect-ratio: 1399 / 700; background-position: center; }
+    .hero::after { border-width: 2.8cqi; }
+    .hero img { width: 38.8%; }
+    .bspot { aspect-ratio: 1400 / 500; margin-top: 3.5cqi; }
+    .ban.tees > img, .ban.shorts > img { object-position: center bottom; }
+    .ban.shorts > img { object-position: center top; }
+    .pp { top: 34%; width: 22%; }
+    .tees .pp { left: 7%; }
+    .shorts .pp { left: 65%; }
+    .pp b { font-size: 2.43cqi; } .pp small { font-size: .86cqi; margin-top: .6cqi; } .pp span { font-size: 2.6cqi; margin-top: .5cqi; } .pp i { font-size: .6cqi; margin-top: .4cqi; }
+    .labels { width: 70%; margin: 2cqi auto 0; }
+    .labels button { font-size: 1.9cqi; }
+    .labels small { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .ban { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <img src="img/offer.webp" alt="Online only! Extra 30% off clearance. Use code EXTRA30.">
+  </section>
+
+  <section class="bspot" aria-label="Tees and shorts">
+    <div class="ban tees on">
+      <img src="img/tees.webp" alt="Painted tropical leaves beside three friends lying on a blanket in graphic tees">
+      <p class="pp"><b>Tees</b><small>Starting at</small><span><sup>$</sup>6</span><i>Prices as marked</i></p>
+    </div>
+    <div class="ban shorts">
+      <img src="img/shorts.webp" alt="Couple laughing in the surf in denim and striped shorts">
+      <p class="pp"><b>Shorts</b><small>Starting at</small><span><sup>$</sup>24</span></p>
+    </div>
+  </section>
+  <div class="labels" role="group" aria-label="Show tees or shorts">
+    <button data-k="tees" aria-pressed="true"><span class="lt">Aeropostale</span> <b>Tees</b><small>Starting at $6</small></button>
+    <button data-k="shorts" aria-pressed="false"><span class="lt">Aeropostale</span> <b>Shorts</b><small>Starting at $24</small></button>
+  </div>
+
+  <p class="credit">Creative and Art Direction by Rire Nakpodia. Originally designed and built for Aéropostale.</p>
+</div>
+<script>
+  // Tees and shorts trade places every 4.5 seconds; hovering or tapping a label takes over
+  const bans = [...document.querySelectorAll(".ban")], btns = [...document.querySelectorAll(".labels button")];
+  let cur = "tees", timer = null;
+  function show(k) {
+    cur = k;
+    bans.forEach(b => b.classList.toggle("on", b.classList.contains(k)));
+    btns.forEach(b => b.setAttribute("aria-pressed", b.dataset.k === k));
+  }
+  const start = () => { if (!timer) timer = setInterval(() => show(cur === "tees" ? "shorts" : "tees"), 4500); };
+  const stop = () => { clearInterval(timer); timer = null; };
+  btns.forEach(b => {
+    b.addEventListener("mouseenter", () => { stop(); show(b.dataset.k); });
+    b.addEventListener("mouseleave", start);   // like the original, it resumes when the pointer leaves
+    b.addEventListener("click", () => { stop(); show(b.dataset.k); });
+  });
+  start();
+
+  const report = () => parent !== window && parent.postMessage({ type: "lookbook-height", height: document.documentElement.scrollHeight }, "*");
+  new ResizeObserver(report).observe(document.body);
+</script>
+</body>
+</html>
