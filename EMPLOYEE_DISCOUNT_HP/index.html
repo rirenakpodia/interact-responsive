@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aéropostale: Employee Discount Sale</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; background: #fff; }
+  body { font-family: Helvetica, Arial, sans-serif; color: #111; -webkit-font-smoothing: antialiased; }
+  @media (min-width: 980px) { html, body { background: #f4f4f2; } body { padding: 40px 24px; } }
+
+  .wrap { container-type: inline-size; width: 100%; max-width: 960px; margin: 0 auto; padding-bottom: 22px; background: #fff; }
+  @media (min-width: 980px) { .wrap { padding: 24px 24px 22px; box-shadow: 0 2px 24px rgba(0,0,0,.08); } }
+  .credit { text-align: center; font-size: 11px; color: #888; margin: 16px 16px 0; }
+
+  .strip { position: relative; }
+  .sec { position: relative; }
+  .sec > img { display: block; width: 100%; height: auto; }
+
+  /* Phone: offer card first, then each photo cropped tall with its prices on a dark band below */
+  .rail { padding: 18px 0 20px; background: #eef0f0; }
+  .card { display: block; width: 78%; max-width: 331px; height: auto; margin: 0 auto; box-shadow: 4px 6px 6px rgba(14,14,14,.3); }
+  .sec.ph > img { aspect-ratio: 4 / 5; object-fit: cover; object-position: var(--x, 50%) center; }
+  .prices { display: flex; justify-content: center; gap: 4%; padding: 14px 10px; background: #2f3335; }
+  .prices img { display: block; width: 30%; max-width: 170px; height: auto; }
+  .prices.lt { background: #e6eaeb; }
+
+  /* Wider: the original long page with the offer card pinned on the left */
+  @container (min-width: 760px) {
+    .rail { position: absolute; z-index: 2; left: 3.24%; top: 0; width: 30.68%; height: 85.8%; padding: 1.9% 0 0; background: none; }
+    .card { position: sticky; top: 14px; width: 100%; max-width: none; margin: 0; }
+    .sec.ph > img { aspect-ratio: auto; object-fit: fill; }
+    .prices { position: absolute; left: var(--l); top: var(--t); width: 15.76%; display: block; padding: 0; background: none; }
+    .prices img { width: 100%; max-width: none; margin-bottom: 53.5%; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="strip">
+    <div class="rail">
+      <img class="card" src="img/card.webp" alt="Online sneak peek! Employee discount sale. 1. Start with our lowest sale price. 2. Take an extra 30% off everything. 3. No exclusions! Online use code EMPLOYEE30.">
+    </div>
+
+    <div class="sec ph" style="--x:51%">
+      <img src="img/p1.jpg" alt="Girl in a red beanie and puffer vest by a mountain lake in the snow">
+      <div class="prices" style="--l:73.3%;--t:8.75%"><img src="img/price-a-1.webp" alt="Tees $6, was $8"><img src="img/price-a-2.webp" alt="Jackets and vests $21, was $30"><img src="img/price-a-3.webp" alt="Jeans $19, was $26"></div>
+    </div>
+    <div class="sec ph" style="--x:70%">
+      <img src="img/p2.jpg" alt="Guy leaping in a plaid shirt, beanie and joggers by the lake">
+      <div class="prices lt" style="--l:41.3%;--t:10.6%"><img src="img/price-b-1.webp" alt="Graphic tees $6, was $8"><img src="img/price-b-2.webp" alt="Joggers $16, was $22"><img src="img/price-b-3.webp" alt="Shoes $13, was $18"></div>
+    </div>
+    <div class="sec ph" style="--x:53%">
+      <img src="img/p3.jpg" alt="Girl in a cardigan sitting on a rock above the lake">
+      <div class="prices lt" style="--l:75%;--t:11.3%"><img src="img/price-c-1.webp" alt="Sweaters $18, was $25"><img src="img/price-c-2.webp" alt="Dresses $17, was $24"><img src="img/price-c-3.webp" alt="Leggings $7, was $10"></div>
+    </div>
+    <div class="sec ph" style="--x:71%">
+      <img src="img/p4.jpg" alt="Guy in a maroon Aero hoodie in a snowy meadow">
+      <div class="prices" style="--l:43.8%;--t:15.4%"><img src="img/price-d-1.webp" alt="Hoodies and sweats $16, was $22"><img src="img/price-d-2.webp" alt="Polos $7, was $9"></div>
+    </div>
+    <div class="sec">
+      <img src="img/lld.jpg" alt="Live Love Dream: girl in a cozy sweater and holiday leggings">
+      <div class="prices" style="--l:70.2%;--t:9.4%"><img src="img/price-e-1.webp" alt="Active $12, was $18"><img src="img/price-e-2.webp" alt="Yoga $13, was $18"><img src="img/price-e-3.webp" alt="Lounge $9, was $12"></div>
+    </div>
+    <div class="sec"><img src="img/faves.jpg" alt="Shop our other faves: Bethany Mota, Live Love Dream, Tokyo Darling, Aéropostale Room"></div>
+    <div class="sec"><img src="img/bf.jpg" alt="Black Friday Dollars: $20 cash card when you spend $80 online, or $10 cash card when you spend $40 in stores"></div>
+  </div>
+  <p class="credit">Creative and Art Direction by Rire Nakpodia. Originally designed and built for Aéropostale.</p>
+</div>
+<script>
+  const report = () => parent !== window && parent.postMessage({ type: "lookbook-height", height: document.documentElement.scrollHeight }, "*");
+  new ResizeObserver(report).observe(document.body);
+</script>
+</body>
+</html>
