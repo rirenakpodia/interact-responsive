@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>P.S. from Aéropostale: Girls Holiday Lookbook</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; background: #fff; }
+  body { font-family: Helvetica, Arial, sans-serif; color: #111; -webkit-font-smoothing: antialiased; }
+  @media (min-width: 980px) { html, body { background: #f4f4f2; } body { padding: 40px 24px; } }
+
+  .wrap { container-type: inline-size; width: 100%; max-width: 960px; margin: 0 auto; padding-bottom: 22px; background: #fff; }
+  @media (min-width: 980px) { .wrap { padding: 24px 24px 22px; box-shadow: 0 2px 24px rgba(0,0,0,.08); } }
+  .credit { text-align: center; font-size: 11px; color: #888; margin: 16px 16px 0; }
+  .hero { display: block; width: 100%; height: auto; }
+
+  /* Phone: copy, then the compare slider */
+  .copy img { display: block; width: 80%; max-width: 380px; height: auto; margin: 30px auto 18px; }
+  .cmp { position: relative; margin: 0; overflow: hidden; touch-action: pan-y; user-select: none; -webkit-user-select: none; cursor: ew-resize; --p: 0%; }
+  .cmp img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+  .cmp .top { clip-path: inset(0 calc(100% - var(--p)) 0 0); }
+  .handle { position: absolute; z-index: 2; top: 50%; left: var(--p); width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; background: #e2262b url(img/cd-arrows.svg) center no-repeat; box-shadow: 0 0 0 6px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.3); transform: scale(0); opacity: 0; }
+  .cmp.anim .top { transition: clip-path .7s cubic-bezier(.3,1.5,.55,1); }
+  .cmp.anim .handle { transition: left .7s cubic-bezier(.3,1.5,.55,1); }
+  .cmp.shown .handle { transform: none; opacity: 1; transition: transform .3s .7s, opacity 0s .7s; }
+  .cmp.shown.anim .handle { transition: left .7s cubic-bezier(.3,1.5,.55,1), transform .3s .7s, opacity 0s .7s; }
+  .handle:focus-visible { outline: 2px solid #111; outline-offset: 8px; }
+
+  /* Wider: copy and slider side by side, alternating */
+  @container (min-width: 760px) {
+    .look { display: grid; grid-template-columns: 1fr 1fr; }
+    .look.rev .copy { order: 2; }
+    .copy { padding-top: 15%; }
+    .copy img { width: 74%; max-width: none; margin: 0 auto; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <img class="hero" src="img/hero.jpg" alt="Lookbook: Into the Woods. Girl in a fuzzy white sweater dress in a snowy forest set.">
+  <section class="look">
+    <div class="copy"><img src="img/copy1.jpg" alt="Howl worthy holiday! Layer on cute and quirky separates that she'll keep near and deer."></div>
+    <figure class="cmp" style="aspect-ratio:1000/1245" aria-label="Drag to compare the look and the pieces">
+      <img src="img/look1a.jpg" alt="Girl in a reindeer sweater and red beanie">
+      <img class="top" src="img/look1b.jpg" alt="The pieces: gray reindeer sweater, red pom beanie and red dotted leggings">
+      <span class="handle" role="slider" tabindex="0" aria-label="Compare" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25"></span>
+    </figure>
+  </section>
+  <section class="look rev">
+    <div class="copy"><img src="img/copy2.jpg" alt="Wobble after this! Take your wardrobe for a spin by adding unexpected glitz and glam."></div>
+    <figure class="cmp" style="aspect-ratio:1000/1404" aria-label="Drag to compare the look and the pieces">
+      <img src="img/look2a.jpg" alt="Girl in a pink star sweater and sparkly pants">
+      <img class="top" src="img/look2b.jpg" alt="The pieces: pink star sweater and sequin pants">
+      <span class="handle" role="slider" tabindex="0" aria-label="Compare" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25"></span>
+    </figure>
+  </section>
+  <section class="look">
+    <div class="copy"><img src="img/copy3.jpg" alt="Hop to it! Stay warm in plaids and puffers for a cute twist on the lumberjack look."></div>
+    <figure class="cmp" style="aspect-ratio:1000/1254" aria-label="Drag to compare the look and the pieces">
+      <img src="img/look3a.jpg" alt="Girl in a red puffer vest over a plaid shirt">
+      <img class="top" src="img/look3b.jpg" alt="The pieces: red puffer vest and plaid shirt">
+      <span class="handle" role="slider" tabindex="0" aria-label="Compare" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25"></span>
+    </figure>
+  </section>
+  <p class="credit">Creative and Art Direction by Rire Nakpodia. Originally designed and built for P.S. from Aéropostale.</p>
+</div>
+<script>
+  // Drag (or tap, or use arrow keys) to slide between the look and its pieces
+  document.querySelectorAll(".cmp").forEach(cmp => {
+    const handle = cmp.querySelector(".handle");
+    const set = p => { p = Math.max(0, Math.min(100, p)); cmp.style.setProperty("--p", p + "%"); handle.setAttribute("aria-valuenow", Math.round(p)); };
+    const at = e => (e.clientX - cmp.getBoundingClientRect().left) / cmp.clientWidth * 100;
+    let drag = false, sx = 0, sy = 0, decided = false;
+    cmp.addEventListener("pointerdown", e => { drag = true; decided = e.pointerType === "mouse"; sx = e.clientX; sy = e.clientY; cmp.classList.remove("anim"); if (decided) { cmp.setPointerCapture(e.pointerId); set(at(e)); } });
+    cmp.addEventListener("pointermove", e => {
+      if (!drag) return;
+      if (!decided) { if (Math.abs(e.clientX - sx) < 6 && Math.abs(e.clientY - sy) < 6) return; if (Math.abs(e.clientY - sy) > Math.abs(e.clientX - sx)) { drag = false; return; } decided = true; cmp.setPointerCapture(e.pointerId); }
+      set(at(e));
+    });
+    const end = e => { if (drag && !decided && e.type === "pointerup") { cmp.classList.add("anim"); set(at(e)); } drag = false; };
+    cmp.addEventListener("pointerup", end); cmp.addEventListener("pointercancel", end);
+    handle.addEventListener("keydown", e => { const p = parseFloat(getComputedStyle(cmp).getPropertyValue("--p")) || 0; if (e.key === "ArrowLeft") set(p - 5); if (e.key === "ArrowRight") set(p + 5); });
+    // Like the original, it bounces open to a quarter when it comes on screen
+    let done = false;
+    const reveal = () => { if (done) return; done = true; cmp.classList.add("anim", "shown"); set(25); };
+    new IntersectionObserver((es, o) => { if (es.some(x => x.isIntersecting)) { reveal(); o.disconnect(); } }, { threshold: .4 }).observe(cmp);
+  });
+  setTimeout(() => document.querySelectorAll(".cmp").forEach(c => { const r = c.getBoundingClientRect(); if (r.top < innerHeight && !c.classList.contains("shown")) { c.classList.add("anim", "shown"); c.style.setProperty("--p", "25%"); } }), 1500);
+
+  const report = () => parent !== window && parent.postMessage({ type: "lookbook-height", height: document.documentElement.scrollHeight }, "*");
+  new ResizeObserver(report).observe(document.body);
+</script>
+</body>
+</html>
