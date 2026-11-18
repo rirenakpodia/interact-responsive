@@ -94,7 +94,7 @@
     const fig = document.createElement("figure");
     fig.className = "tile";
     let html = `<img class="bw" src="img/g_${key}-${t}-0.jpg" alt="">`;
-    for (let n = 1; n <= 3; n++) html += `<img src="img/g_${key}-${t}-${n}.jpg" alt="" loading="lazy">`;
+    for (let n = 1; n <= 3; n++) html += `<img src="img/g_${key}-${t}-${n}.jpg" alt="">`;
     fig.innerHTML = html;
     const frames = [...fig.querySelectorAll("img:not(.bw)")];
     let i = 0, timer = null;

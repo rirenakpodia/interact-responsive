@@ -95,7 +95,7 @@
   <div class="bar"><img src="img/footer.aero.png" alt="Exclusively at Aéropostale"></div>
   <div class="dots" id="dots" aria-label="Choose a slide"></div>
   <p class="note">Swipe for more looks</p>
-  <p class="credit">Portfolio piece by Rire Design. Originally designed and built for Aéropostale.</p>
+  <p class="credit">Creative and Art Direction by Rire Nakpodia. Originally designed and built for Aéropostale.</p>
 </section>
 
 <script>
@@ -116,7 +116,7 @@
     for (const half of ["a", "b"]) {
       const f = document.createElement("figure");
       f.className = "slide" + (half === "b" ? " half-b" : " half-a");
-      f.innerHTML = `<img src="img/${s.img}.jpg" data-alt="Look: ${half === "a" ? la : lb}" alt="Look: ${half === "a" ? la : lb}" loading="lazy" style="object-position:${half === "a" ? "0%" : "100%"} 50%">`;
+      f.innerHTML = `<img src="img/${s.img}.jpg" data-alt="Look: ${half === "a" ? la : lb}" alt="Look: ${half === "a" ? la : lb}" style="object-position:${half === "a" ? "0%" : "100%"} 50%">`;
       track.appendChild(f);
     }
   });

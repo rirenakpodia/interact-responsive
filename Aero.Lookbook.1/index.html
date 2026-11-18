@@ -78,7 +78,7 @@
     <button class="arrow next" aria-label="Next look">&#8250;</button>
     <div class="dots" id="dots" aria-label="Choose a look"></div>
   </div>
-  <p class="credit">Portfolio piece by Rire Design. Originally designed and built for Aéropostale.</p>
+  <p class="credit">Creative and Art Direction by Rire Nakpodia. Originally designed and built for Aéropostale.</p>
 </section>
 
 <script>
@@ -110,7 +110,7 @@
     fig.style.cssText = `--close:${l.close}%;--full:${l.full}%;--x:${l.x}%;--y:${l.y}%;--w:${l.w}%`;
     fig.innerHTML =
       `<div class="photo" role="button" tabindex="0" aria-pressed="false" aria-label="${strip(l.title)}: show the full look">` +
-        `<img src="img/${l.img}.jpg" alt="${strip(l.title)} look" loading="lazy">` +
+        `<img src="img/${l.img}.jpg" alt="${strip(l.title)} look">` +
         `<span class="swap" aria-hidden="true">&#8644; Full look</span>` +
       `</div>` +
       `<figcaption class="copy"><h2>${l.title}</h2><p>${l.body}</p></figcaption>`;

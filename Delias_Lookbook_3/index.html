@@ -115,13 +115,13 @@
     // wide screens: the whole spread
     const s = document.createElement("figure");
     s.className = "look spread"; s.style.cssText = `--x:${x}%;--y:${y}%`;
-    s.innerHTML = `<div class="photo"><img src="${src}" alt="${plain(name)}: two views of the look" loading="lazy"></div><figcaption class="name">${name}</figcaption>`;
+    s.innerHTML = `<div class="photo"><img src="${src}" alt="${plain(name)}: two views of the look"></div><figcaption class="name">${name}</figcaption>`;
     track.appendChild(s);
     // phones: each half of the spread on its own
     [0, 100].forEach((p, h) => {
       const f = document.createElement("figure");
       f.className = "look single";
-      f.innerHTML = `<div class="photo"><img src="${src}" alt="${plain(name)}, ${h ? "second" : "first"} view" loading="lazy" style="object-position:${p}% 50%"></div><figcaption class="name">${plain(name)}</figcaption>`;
+      f.innerHTML = `<div class="photo"><img src="${src}" alt="${plain(name)}, ${h ? "second" : "first"} view" style="object-position:${p}% 50%"></div><figcaption class="name">${plain(name)}</figcaption>`;
       track.appendChild(f);
     });
   });
