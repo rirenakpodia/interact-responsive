@@ -20,5 +20,6 @@ The original desktop-era versions live in [rirenakpodia/interact](https://github
 | Delia's Personali-Tee Quiz | [interact/Delias_TQuiz](https://rirenakpodia.github.io/interact/Delias_TQuiz/index.html) | [interact-responsive/Delias_TQuiz](https://rirenakpodia.github.io/interact-responsive/Delias_TQuiz/) |
 | Aéropostale Back to Basics (homepage spot) | [interact/BACK_TO_BASICS_A_SPOT](https://rirenakpodia.github.io/interact/BACK_TO_BASICS_A_SPOT/back-to-basics.html) | [interact-responsive/BACK_TO_BASICS_A_SPOT](https://rirenakpodia.github.io/interact-responsive/BACK_TO_BASICS_A_SPOT/) |
 | Aéropostale Borrowed from the Boys | [interact/BORROWED_FROM_BOYS_B](https://rirenakpodia.github.io/interact/BORROWED_FROM_BOYS_B/borrowed.html) | [interact-responsive/BORROWED_FROM_BOYS_B](https://rirenakpodia.github.io/interact-responsive/BORROWED_FROM_BOYS_B/) |
+| Aéropostale Homepage Carousel | [interact/D_SPOT_CAROUSEL](https://rirenakpodia.github.io/interact/D_SPOT_CAROUSEL/hp-carosel.html) | [interact-responsive/D_SPOT_CAROUSEL](https://rirenakpodia.github.io/interact-responsive/D_SPOT_CAROUSEL/) |
 
 Images in the rebuilds were AI upscaled (Real-ESRGAN) from the original web assets. Where copy was baked into an image, it was removed and reset as live text.
