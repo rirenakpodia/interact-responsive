@@ -128,12 +128,14 @@
   });
 
   // Start when the piece is on screen; then advance every 6 seconds, like the original, until someone takes over
-  const io = new IntersectionObserver(es => {
-    if (!es.some(e => e.isIntersecting)) return;
-    io.disconnect(); show(0);
+  let started = false;
+  function begin() {
+    if (started) return; started = true; io.disconnect(); show(0);
     if (!matchMedia("(prefers-reduced-motion: reduce)").matches) auto = setInterval(() => show(cur + 1), 6000);
-  }, { threshold: 0.4 });
+  }
+  const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) begin(); }, { threshold: 0.4 });
   io.observe(stage);
+  setTimeout(begin, 1500); // fallback in case the on-screen signal never arrives
 
   const report = () => parent !== window && parent.postMessage({ type: "lookbook-height", height: document.documentElement.scrollHeight }, "*");
   new ResizeObserver(report).observe(document.body);
