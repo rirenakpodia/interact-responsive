@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aéropostale: Back to Basics</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; background: #fff; }
+  body { font-family: Helvetica, Arial, sans-serif; color: #111; -webkit-font-smoothing: antialiased; }
+  @media (min-width: 980px) { html, body { background: #f4f4f2; } body { padding: 40px 24px; } }
+
+  .wrap { container-type: inline-size; width: 100%; max-width: 960px; margin: 0 auto; padding-bottom: 22px; background: #fff; }
+  @media (min-width: 980px) { .wrap { padding: 24px 24px 22px; box-shadow: 0 2px 24px rgba(0,0,0,.08); } }
+
+  /* Phone: photos on top, offer panel below */
+  .spot { display: grid; grid-template-columns: 1fr; }
+  .models { position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: #dfe3e4; }
+  .models img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: right center; opacity: 0; }
+  .models img.on { opacity: 1; animation: inRight .5s both; }
+  @keyframes inRight { from { opacity: 0; transform: translate3d(100%, 0, 0); } to { opacity: 1; transform: none; } }
+  .offer { position: relative; background: #c4a06e url(img/back.webp) center / cover no-repeat; padding: 9% 6% 7%; }
+  .offer img { display: block; width: 100%; max-width: 501px; height: auto; margin: 0 auto; }
+  .credit { text-align: center; font-size: 11px; color: #888; margin: 16px 16px 0; }
+
+  /* Wider: the original side-by-side spot */
+  @container (min-width: 700px) {
+    .spot { grid-template-columns: 34% 66%; aspect-ratio: 1080 / 700; }
+    .models { aspect-ratio: auto; }
+    .offer { padding: 0; }
+    .offer img { position: absolute; left: 15%; top: 9.14%; width: 70.3%; max-width: none; margin: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { .models img.on { animation: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="spot">
+    <div class="models">
+      <img class="on" src="img/girl.jpg" alt="Girl in a denim jacket, plaid shirt and navy skinny jeans">
+      <img src="img/guy.jpg" alt="Guy in a grey sweater with suspenders and dark jeans">
+    </div>
+    <div class="offer">
+      <img src="img/offer.webp" alt="Online only. Back to Basics. Get your essentials and snag this exclusive deal! Extra 30% off 10+ items, extra 20% off 7+ items, extra 10% off 3+ items. Visit our Back to Basics shop.">
+    </div>
+  </div>
+  <p class="credit">Creative and Art Direction by Rire Nakpodia. Originally designed and built for Aéropostale.</p>
+</div>
+<script>
+  // Swap the model every 3.5 seconds, sliding the new one in from the right
+  const imgs = [...document.querySelectorAll(".models img")];
+  let i = 0;
+  setInterval(() => {
+    imgs[i].classList.remove("on");
+    i = (i + 1) % imgs.length;
+    void imgs[i].offsetWidth;
+    imgs[i].classList.add("on");
+  }, 3500);
+
+  const report = () => parent !== window && parent.postMessage({ type: "lookbook-height", height: document.documentElement.scrollHeight }, "*");
+  new ResizeObserver(report).observe(document.body);
+</script>
+</body>
+</html>
