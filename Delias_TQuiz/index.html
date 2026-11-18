@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Delia's: What's Your Personali-Tee?</title>
+<!-- Gotham Light and Bold via Rire's Adobe Fonts web project "interact-responsive (Gotham Light)" -->
+<link rel="stylesheet" href="https://use.typekit.net/txx6mha.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root { --pink: #ff5a63; --rose: #f37d8c; }
+  html, body { margin: 0; background: #fff; }
+  body { font-family: "gotham", Helvetica, Arial, sans-serif; color: #222; -webkit-font-smoothing: antialiased; }
+  @media (min-width: 980px) { html, body { background: #f4f4f2; } body { padding: 40px 24px; } }
+
+  .quiz { container-type: inline-size; width: 100%; max-width: 960px; margin: 0 auto; padding-bottom: 22px; background: #fff; }
+  @media (min-width: 980px) { .quiz { padding: 24px 24px 22px; box-shadow: 0 2px 24px rgba(0,0,0,.08); } }
+
+  .stage { position: relative; }
+  .bg { display: block; width: 100%; height: auto; aspect-ratio: 800 / 636; }
+  .screen { display: none; }
+  .screen.on { display: block; animation: rise .45s ease both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  /* Phone: the photo with the title on top, the quiz below it */
+  .panel { padding: 20px 20px 4px; font-weight: 300; font-size: 21px; line-height: 1.3; }
+  .panel p { margin: 0 0 18px; }
+  .opt { display: flex; align-items: center; gap: 10px; width: 100%; margin: 0 0 10px; padding: 8px 0; border: 0; background: none; font: inherit; color: inherit; text-align: left; cursor: pointer; }
+  .opt .box { position: relative; flex: 0 0 auto; width: 22px; height: 22px; }
+  .opt .box img { position: absolute; left: 0; top: 0; width: 22px; height: 22px; }
+  .opt .box::before { content: ""; position: absolute; inset: 1px; border: 1.5px solid #bbb; }
+  @container (min-width: 700px) { .opt .box::before { display: none; } }
+  .opt .box .heart { left: -2px; top: 4px; width: 20px; height: 20px; opacity: 0; transform: scale(.4); transition: opacity .2s, transform .25s cubic-bezier(.3,1.8,.5,1); }
+  .opt[aria-pressed="true"] .heart { opacity: 1; transform: none; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; margin-top: 6px; padding: 9px 18px 8px; border: 0; background: #000; color: #fff; font: 700 18px/1 "gotham", Helvetica, sans-serif; cursor: pointer; }
+  .btn.next { background: var(--pink); }
+  .btn:disabled { opacity: .35; cursor: default; }
+  .count { margin: 18px 0 0; font-size: 14px; letter-spacing: .2em; text-transform: uppercase; color: #8a8a8a; }
+  .count b { color: #222; font-weight: 700; }
+
+  /* Results */
+  .result { display: none; }
+  .result.on { display: block; animation: rise .5s ease both; }
+  .result .full { display: none; }
+  .result .head { display: block; width: 100%; height: auto; }
+  .result .body { margin: 4px 20px 16px; font-size: 16px; line-height: 1.5; text-align: center; font-weight: 300; }
+  .result .tees { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 16px; }
+  .result .tees img { width: 100%; height: auto; display: block; }
+  .again { display: block; margin: 18px auto 0; background: var(--pink); }
+  .stage.done .bg, .stage.done .screens { display: none; }
+  .credit { text-align: center; font-size: 11px; color: #888; margin: 16px 16px 0; }
+
+  /* Desktop: everything on the original 800 x 636 page */
+  @container (min-width: 700px) {
+    .stage { aspect-ratio: 800 / 636; overflow: hidden; }
+    .bg { position: absolute; inset: 0; height: 100%; }
+    .screens { position: absolute; left: 8.1%; top: 39.3%; width: 38%; }
+    .panel { padding: 0; font-size: 2.75cqi; }
+    .panel p { margin-bottom: 2.5cqi; }
+    .opt { margin-bottom: .6cqi; padding: .5cqi 0; }
+    .btn { font-size: 2.2cqi; }
+    .count { font-size: 1.6cqi; }
+    .stage.done .bg, .stage.done .screens { display: block; visibility: hidden; }
+    .result { position: absolute; inset: 0; }
+    .result .full { display: block; width: 100%; height: 100%; }
+    .result .head, .result .body, .result .tees { display: none; }
+    .again { position: absolute; left: 50%; bottom: 2.6%; transform: translateX(-50%); margin: 0; font-size: 1.9cqi; }
+  }
+  @media (prefers-reduced-motion: reduce) { .screen.on, .result.on { animation: none; } }
+</style>
+</head>
+<body>
+<section class="quiz" aria-label="Delia's What's Your Personali-Tee quiz">
+  <div class="stage" id="stage">
+    <img class="bg" src="img/main-bg.jpg" alt="What's your personali-tee? A model in a Meow tee lowers her sunglasses">
+    <div class="screens" id="screens" aria-live="polite"></div>
+    <div id="results"></div>
+  </div>
+  <p class="credit">Creative and Art Direction by Rire Nakpodia. Originally designed and built for Delia's.</p>
+</section>
+
+<script>
+  // Results, in the order the original scoring used: 0 Disney Princess, 1 Hopeless Romantic, 2 Flower Girl, 3 Summer Lover, 4 Bold Beauty
+  const results = [
+    { key: "disney-princess", name: "Disney Princess", tees: 4,
+      body: "Just like Mickey, you're there for your friends 'til the end. A little bit silly and a whole lot of fun, they can always depend on you for laughs and good times. Make it last forever in these collectible/throwback tees!" },
+    { key: "hopeless-romantic", name: "Hopeless Romantic", tees: 3,
+      body: "Love is in the air whenever you're around! As a true romantic, you genuinely care about people and you aren't afraid to show it. Feel free to wear your heart on your tee in these swoon-worthy styles!" },
+    { key: "flower-girl", name: "Flower Girl", tees: 3,
+      body: "From strappy sandals to carefree braids, you're a total flower child. So grab your floral crown and check out these petal picks that fit your laid-back vibe to a tee." },
+    { key: "summer-lover", name: "Summer Lover", tees: 4,
+      body: "Hello, sunshine! You live for palm trees, the ocean breeze and endless summer nights. Nail your warm-weather wardrobe with anchor graphics and season-perfect prints." },
+    { key: "bold-beauty", name: "Bold Beauty", tees: 3,
+      body: "Always willing to take fashion risks, you dance to the beat of your own drum and go after what you want, even if it's just more sleep! Speak your mind in these statement tees!" }
+  ];
+  // Questions and which result each answer counts toward (from the notes in the original build)
+  const questions = [
+    ["You'll admit that you're a total #fangirl when it comes to:", [["J. Law", 2], ["T. Swift", 4]]],
+    ["It's #manimonday! You're rockin':", [["Bubblegum pink", 0], ["Edgy nail art", 4]]],
+    ["This summer, you're more likely to be:", [["A yoga bunny", 3], ["A lounge lizard", 3]]],
+    ["Time to beat the heat with cute hot weather 'dos! You're more:", [["Braided beauty", 1], ["Pretty in pigtails", 0]]],
+    ["If your life had a theme song, this would be it:", [["Problem by Ariana Grande", 4], ["Royals by Lorde", 2]]],
+    ["Movie night! You and your besties head to:", [["Divergent", 3], ["The Fault In Our Stars", 1]]]
+  ];
+
+  const stage = document.getElementById("stage");
+  const screens = document.getElementById("screens");
+  const resultsEl = document.getElementById("results");
+  const el = (html) => { const d = document.createElement("div"); d.innerHTML = html.trim(); return d.firstChild; };
+
+  // Intro
+  const intro = el(`<div class="screen panel"><p>Graphics are a fun way to share your personality with the world, but which styles have got you down to a tee? Take this quiz to find out now!</p><button class="btn go">go &#8250;</button></div>`);
+  screens.appendChild(intro);
+
+  // Questions
+  const answers = [];
+  const qScreens = questions.map(([q, opts], i) => {
+    const s = el(`<div class="screen panel"><p>${q}</p>${opts.map(([label], k) =>
+      `<button class="opt" aria-pressed="false" data-k="${k}"><span class="box"><img src="img/checkbox.png" alt=""><img class="heart" src="img/check-heart.png" alt=""></span>${label}</button>`).join("")}
+      <button class="btn next" disabled>next &#8250;</button><p class="count">Question <b>${i + 1}</b>/6</p></div>`);
+    s.querySelectorAll(".opt").forEach(b => b.addEventListener("click", () => {
+      s.querySelectorAll(".opt").forEach(o => o.setAttribute("aria-pressed", o === b));
+      answers[i] = opts[+b.dataset.k][1];
+      s.querySelector(".next").disabled = false;
+    }));
+    s.querySelector(".next").addEventListener("click", () => i < questions.length - 1 ? go(qScreens[i + 1]) : finish());
+    screens.appendChild(s);
+    return s;
+  });
+  const calc = el(`<div class="screen panel"><p>Calculating&hellip;</p></div>`);
+  screens.appendChild(calc);
+
+  // Results: full page on desktop; title, live copy and the tees in a grid on phones
+  const resultEls = results.map(r => {
+    const tees = Array.from({ length: r.tees }, (_, k) => `<img src="img/res-${r.key}-${k + 1}.jpg" alt="${r.name} tee ${k + 1}">`).join("");
+    const node = el(`<div class="result"><img class="full" src="img/${r.key}.jpg" alt="${r.name}: ${r.body}">
+      <img class="head" src="img/res-${r.key}-title.jpg" alt="You're a ${r.name}"><p class="body">${r.body}</p>
+      <div class="tees">${tees}</div><button class="btn again">Take it again &#8250;</button></div>`);
+    node.querySelector(".again").addEventListener("click", restart);
+    resultsEl.appendChild(node);
+    return node;
+  });
+
+  function go(screen) {
+    [...screens.children].forEach(s => s.classList.toggle("on", s === screen));
+  }
+  function finish() {
+    go(calc);
+    const score = [0, 0, 0, 0, 0];
+    answers.forEach(a => score[a]++);
+    const top = Math.max(...score);
+    // ties go to whichever tied result was picked most recently
+    const pick = [...answers].reverse().find(a => score[a] === top);
+    setTimeout(() => {
+      stage.classList.add("done");
+      resultEls.forEach((r, k) => r.classList.toggle("on", k === pick));
+      if (stage.getBoundingClientRect().top < 0) stage.scrollIntoView({ behavior: "smooth" });
+    }, 1300);
+  }
+  function restart() {
+    answers.length = 0;
+    qScreens.forEach(s => { s.querySelectorAll(".opt").forEach(o => o.setAttribute("aria-pressed", "false")); s.querySelector(".next").disabled = true; });
+    resultEls.forEach(r => r.classList.remove("on"));
+    stage.classList.remove("done");
+    go(qScreens[0]);
+  }
+  intro.querySelector(".go").addEventListener("click", () => go(qScreens[0]));
+  go(intro);
+
+  const report = () => parent !== window && parent.postMessage({ type: "lookbook-height", height: document.documentElement.scrollHeight }, "*");
+  new ResizeObserver(report).observe(document.body);
+</script>
+</body>
+</html>

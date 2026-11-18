@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Delia's: Party Dresses</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; background: #fff; }
+  body { font-family: Helvetica, Arial, sans-serif; color: #222; -webkit-font-smoothing: antialiased; }
+  @media (min-width: 980px) { html, body { background: #f4f4f2; } body { padding: 40px 24px; } }
+
+  .dresses { container-type: inline-size; width: 100%; max-width: 960px; margin: 0 auto; padding: 16px 0 22px; background: #fff; }
+  @media (min-width: 980px) { .dresses { padding: 24px 24px 22px; box-shadow: 0 2px 24px rgba(0,0,0,.08); } }
+
+  .stage { position: relative; touch-action: pan-y; }
+  .view { display: none; }
+  .view.on { display: block; }
+  img { display: block; height: auto; }
+
+  /* Phone: title, then the dress on its hanger with the doodled stars, then the nine Polaroids in a grid */
+  .title { width: 62%; margin: 0 auto 4px; }
+  .art { position: relative; width: 78%; margin: 0 auto; aspect-ratio: 396 / 493; }
+  .art .stars, .art .dress { position: absolute; }
+  .art .stars { left: 8.333%; top: 0; width: 88.889%; }
+  .dress { transform-origin: 50% 2%; }
+  .pols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px 4px; padding: 6px 12px 0; }
+  .pol { width: 100%; }
+
+  /* Things fade in like the original: dress and title first, then the Polaroids at random */
+  .fade { opacity: 0; transition: opacity .5s ease; transition-delay: var(--d, 0s); }
+  .view.in .fade { opacity: 1; }
+  .view.in .dress.wiggle { animation: wiggle .6s ease-in-out; }
+  @keyframes wiggle { 0%,100% { transform: rotate(0); } 25% { transform: rotate(1.6deg); } 50% { transform: rotate(-1.8deg); } 75% { transform: rotate(1.4deg); } }
+
+  .arrow { position: absolute; top: 34%; width: 40px; height: 40px; border: 0; border-radius: 50%; background: rgba(255,255,255,.92); color: #111; font-size: 21px; cursor: pointer; box-shadow: 0 1px 6px rgba(0,0,0,.25); z-index: 30; }
+  .arrow.prev { left: 8px; } .arrow.next { right: 8px; }
+  .dots { display: flex; justify-content: center; gap: 8px; padding-top: 14px; }
+  .dots button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 50%; background: #b5b5b5; cursor: pointer; }
+  .dots button[aria-current="true"] { background: #222; width: 22px; border-radius: 4px; }
+  .note { text-align: center; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #666; margin: 10px 0 0; }
+  .credit { text-align: center; font-size: 11px; color: #888; margin: 14px 16px 0; }
+
+  /* Desktop: the original 798 x 611 page, everything where it was */
+  @container (min-width: 700px) {
+    .stage { aspect-ratio: 798 / 611; overflow: hidden; }
+    .view { position: absolute; inset: 0; display: block; visibility: hidden; }
+    .view.on { visibility: visible; }
+    .title, .art, .pol { position: absolute; margin: 0; left: var(--x); top: var(--y); width: var(--w); }
+    .art { left: -1.88%; top: 22.75%; width: 49.624%; }
+    .pols { display: contents; }
+    .arrow { top: 50%; transform: translateY(-50%); width: 44px; height: 44px; }
+    .note { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .fade { transition: none; } .view.in .dress.wiggle { animation: none; } }
+</style>
+</head>
+<body>
+<section class="dresses" aria-label="Delia's party dresses">
+  <div class="stage" id="stage">
+    <button class="arrow prev" aria-label="Previous dress">&#8249;</button>
+    <button class="arrow next" aria-label="Next dress">&#8250;</button>
+  </div>
+  <div class="dots" id="dots" aria-label="Choose a dress"></div>
+  <p class="note">Swipe or tap the arrows for the next dress</p>
+  <p class="credit">Creative and Art Direction by Rire Nakpodia. Originally designed and built for Delia's.</p>
+</section>
+
+<script>
+  const data = [{"name": "Royal Blues", "pol": [{"f": "img/layer_13.webp", "x": 48.246, "y": 1.964, "w": 15.539}, {"f": "img/layer_12.webp", "x": 63.158, "y": 3.601, "w": 17.043}, {"f": "img/layer_11.webp", "x": 81.203, "y": 2.128, "w": 16.541}, {"f": "img/layer_16.webp", "x": 46.241, "y": 34.37, "w": 16.165}, {"f": "img/layer_15.webp", "x": 64.536, "y": 35.843, "w": 16.792}, {"f": "img/layer_14.webp", "x": 80.451, "y": 33.552, "w": 16.667}, {"f": "img/layer_19.webp", "x": 48.997, "y": 63.83, "w": 16.667}, {"f": "img/layer_18.webp", "x": 62.531, "y": 66.939, "w": 17.669}, {"f": "img/layer_17.webp", "x": 81.454, "y": 67.43, "w": 15.915}], "dress": {"f": "img/dress1.webp", "x": 10.101, "y": 16.633, "w": 88.131}, "title": {"f": "img/ROYALBLUES.webp", "x": 10.777, "y": 4.583, "w": 25.689}}, {"name": "Gold Dust", "pol": [{"f": "img/b3.webp", "x": 48.246, "y": 1.964, "w": 15.539}, {"f": "img/b2.webp", "x": 63.158, "y": 3.601, "w": 17.043}, {"f": "img/b1.webp", "x": 81.203, "y": 2.128, "w": 16.541}, {"f": "img/b6.webp", "x": 46.241, "y": 34.37, "w": 16.165}, {"f": "img/b5.webp", "x": 64.536, "y": 35.843, "w": 16.792}, {"f": "img/b4.webp", "x": 80.451, "y": 33.552, "w": 16.667}, {"f": "img/b9.webp", "x": 48.997, "y": 63.83, "w": 16.667}, {"f": "img/b8.webp", "x": 62.531, "y": 66.939, "w": 17.669}, {"f": "img/b7.webp", "x": 81.454, "y": 67.43, "w": 15.915}], "dress": {"f": "img/dress2.webp", "x": 11.616, "y": 16.43, "w": 82.828}, "title": {"f": "img/GOLDDUST.webp", "x": 11.905, "y": 4.583, "w": 24.687}}, {"name": "Hot Spots", "pol": [{"f": "img/c3.webp", "x": 48.246, "y": 1.637, "w": 15.539}, {"f": "img/c2.webp", "x": 63.158, "y": 3.601, "w": 17.043}, {"f": "img/c1.webp", "x": 81.203, "y": 2.128, "w": 16.541}, {"f": "img/c6.webp", "x": 46.241, "y": 34.37, "w": 16.165}, {"f": "img/c5.webp", "x": 64.536, "y": 35.843, "w": 16.792}, {"f": "img/c4.webp", "x": 80.451, "y": 33.552, "w": 16.667}, {"f": "img/c9.webp", "x": 48.997, "y": 63.83, "w": 16.667}, {"f": "img/c8.webp", "x": 62.531, "y": 66.939, "w": 17.669}, {"f": "img/c7.webp", "x": 81.454, "y": 67.43, "w": 15.915}], "dress": {"f": "img/dress3.webp", "x": 11.364, "y": 16.633, "w": 87.879}, "title": {"f": "img/hOTSPOTS.webp", "x": 13.784, "y": 4.583, "w": 21.429}}, {"name": "Silver Shimmer", "pol": [{"f": "img/d3.webp", "x": 48.246, "y": 1.637, "w": 15.539}, {"f": "img/d2.webp", "x": 63.158, "y": 3.601, "w": 17.043}, {"f": "img/d1.webp", "x": 81.203, "y": 2.128, "w": 16.541}, {"f": "img/d6.webp", "x": 46.241, "y": 34.37, "w": 16.165}, {"f": "img/d5.webp", "x": 64.536, "y": 35.843, "w": 16.792}, {"f": "img/d4.webp", "x": 80.451, "y": 33.552, "w": 16.667}, {"f": "img/d9.webp", "x": 48.997, "y": 63.83, "w": 16.667}, {"f": "img/d8.webp", "x": 62.531, "y": 66.939, "w": 17.669}, {"f": "img/d7.webp", "x": 81.454, "y": 67.43, "w": 15.915}], "dress": {"f": "img/Levels1.webp", "x": 0.0, "y": 16.227, "w": 96.717}, "title": {"f": "img/SILVERSHIMMER.webp", "x": 7.018, "y": 4.583, "w": 34.211}}, {"name": "The LBD", "pol": [{"f": "img/e3.webp", "x": 48.246, "y": 1.637, "w": 15.539}, {"f": "img/e2.webp", "x": 63.158, "y": 3.601, "w": 17.043}, {"f": "img/e1.webp", "x": 81.203, "y": 2.128, "w": 16.541}, {"f": "img/e6.webp", "x": 46.241, "y": 34.37, "w": 16.165}, {"f": "img/e5.webp", "x": 64.536, "y": 35.843, "w": 16.792}, {"f": "img/e4.webp", "x": 80.451, "y": 33.552, "w": 16.667}, {"f": "img/e9.webp", "x": 48.997, "y": 63.83, "w": 16.667}, {"f": "img/e8.webp", "x": 62.531, "y": 66.939, "w": 17.669}, {"f": "img/e7.webp", "x": 81.454, "y": 67.43, "w": 15.915}], "dress": {"f": "img/dress5.webp", "x": 4.545, "y": 15.01, "w": 95.455}, "title": {"f": "img/THELBD.webp", "x": 15.915, "y": 4.583, "w": 16.792}}];
+  const stage = document.getElementById("stage");
+  const dots = document.getElementById("dots");
+  const pos = o => `--x:${o.x}%;--y:${o.y}%;--w:${o.w}%`;
+  const views = data.map((d, i) => {
+    const v = document.createElement("div");
+    v.className = "view"; v.setAttribute("role", "group"); v.setAttribute("aria-label", d.name);
+    v.innerHTML =
+      `<img class="title fade" src="${d.title.f}" alt="${d.name}" style="${pos(d.title)};--d:.2s">` +
+      `<div class="art"><img class="stars fade" src="img/stars.webp" alt="" style="--d:.5s">` +
+      `<img class="dress fade" src="${d.dress.f}" alt="${d.name} dress on a hanger" style="left:${d.dress.x}%;top:${d.dress.y}%;width:${d.dress.w}%;--d:.4s"></div>` +
+      `<div class="pols">` + d.pol.map((p, k) => `<img class="pol fade" src="${p.f}" alt="${d.name}, photo ${k + 1}" style="${pos(p)}">`).join("") + `</div>`;
+    stage.insertBefore(v, stage.querySelector(".arrow.next"));
+    const b = document.createElement("button");
+    b.setAttribute("aria-label", d.name); b.addEventListener("click", () => { stop(); show(i); });
+    dots.appendChild(b);
+    return v;
+  });
+
+  let cur = -1, busy = false;
+  function show(i) {
+    i = (i + views.length) % views.length;
+    if (i === cur || busy) return;
+    busy = true;
+    const prev = views[cur];
+    if (prev) prev.classList.remove("in");
+    setTimeout(() => {
+      if (prev) prev.classList.remove("on");
+      const v = views[i];
+      v.querySelectorAll(".pol").forEach(p => p.style.setProperty("--d", (0.4 + Math.random()).toFixed(2) + "s"));
+      v.classList.add("on");
+      requestAnimationFrame(() => requestAnimationFrame(() => v.classList.add("in")));
+      cur = i; busy = false;
+      [...dots.children].forEach((d, k) => d.setAttribute("aria-current", k === i));
+    }, prev ? 550 : 0);
+  }
+
+  // The dress gives a little wiggle on its hanger every few seconds, like the original
+  (function wiggle() {
+    const d = views[cur] && views[cur].querySelector(".dress");
+    if (d) { d.classList.remove("wiggle"); void d.offsetWidth; d.classList.add("wiggle"); }
+    setTimeout(wiggle, 4000 + Math.random() * 4000);
+  })();
+
+  let auto = null;
+  const stop = () => { clearInterval(auto); auto = null; };
+  document.querySelector(".arrow.prev").addEventListener("click", () => { stop(); show(cur - 1); });
+  document.querySelector(".arrow.next").addEventListener("click", () => { stop(); show(cur + 1); });
+  document.addEventListener("keydown", e => { if (e.key === "ArrowRight") { stop(); show(cur + 1); } if (e.key === "ArrowLeft") { stop(); show(cur - 1); } });
+  let x0 = null;
+  stage.addEventListener("pointerdown", e => { x0 = e.clientX; });
+  stage.addEventListener("pointerup", e => { if (x0 === null) return; const dx = e.clientX - x0; x0 = null; if (Math.abs(dx) > 40) { stop(); show(cur + (dx < 0 ? 1 : -1)); } });
+
+  show(0);
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) auto = setInterval(() => show(cur + 1), 6000);
+
+  const report = () => parent !== window && parent.postMessage({ type: "lookbook-height", height: document.documentElement.scrollHeight }, "*");
+  new ResizeObserver(report).observe(document.body);
+</script>
+</body>
+</html>
