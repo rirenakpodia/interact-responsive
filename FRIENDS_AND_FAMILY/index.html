@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aéropostale: Friends &amp; Family</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; background: #fff; }
+  body { font-family: Helvetica, Arial, sans-serif; color: #111; -webkit-font-smoothing: antialiased; }
+  @media (min-width: 980px) { html, body { background: #f4f4f2; } body { padding: 40px 24px; } }
+
+  .wrap { container-type: inline-size; width: 100%; max-width: 960px; margin: 0 auto; padding-bottom: 22px; background: #fff; }
+  @media (min-width: 980px) { .wrap { padding: 24px 24px 22px; box-shadow: 0 2px 24px rgba(0,0,0,.08); } }
+  .credit { text-align: center; font-size: 11px; color: #888; margin: 16px 16px 0; }
+
+  .ff { position: relative; background: #1a514c url(img/green.jpg) center top / 100% auto repeat-y; padding: 18px 0 10px; }
+  .rail { padding: 0 6% 8px; }
+  .promo { display: block; width: 100%; max-width: 420px; height: auto; margin: 0 auto; }
+  .col img { display: block; width: 100%; height: auto; }
+
+  /* Wider: the original, with the offer pinned on the left while the photos scroll */
+  @container (min-width: 760px) {
+    .ff { padding: 0 0 1.5%; }
+    .rail { position: absolute; left: 0; top: 0; width: 47%; height: 100%; padding: 1.85% 0 0 1%; }
+    .promo { position: sticky; top: 20px; max-width: none; }
+    .col { position: relative; z-index: 1; margin-left: 45.56%; width: 54.63%; padding-top: 5.1%; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="ff">
+    <div class="rail">
+      <img class="promo" src="img/promo.webp" alt="Friends & Family: take an extra 30% off your total purchase. Online use code FRIEND30. Get in-store coupon.">
+    </div>
+    <div class="col">
+      <img src="img/col1.webp" alt="Framed photos with sale prices: tops, shorts, tees, camis and tanks, shirts, jeans, polos, joggers, hoodies, dresses, graphic tees, leggings, and Live Love Dream active, lounge and swim">
+      <img src="img/col2.webp" alt="">
+      <img src="img/col3.webp" alt="">
+    </div>
+  </div>
+  <p class="credit">Creative and Art Direction by Rire Nakpodia. Originally designed and built for Aéropostale.</p>
+</div>
+<script>
+  const report = () => parent !== window && parent.postMessage({ type: "lookbook-height", height: document.documentElement.scrollHeight }, "*");
+  new ResizeObserver(report).observe(document.body);
+</script>
+</body>
+</html>
