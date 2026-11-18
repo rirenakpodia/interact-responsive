@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aéropostale: Borrowed from the Boys</title>
+<!-- Gotham via Rire's Adobe Fonts web project "interact-responsive (Gotham)" -->
+<link rel="stylesheet" href="https://use.typekit.net/sza7zys.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; background: #fff; }
+  body { font-family: "gotham", Helvetica, Arial, sans-serif; color: #222; -webkit-font-smoothing: antialiased; }
+  @media (min-width: 980px) { html, body { background: #f4f4f2; } body { padding: 40px 24px; } }
+
+  .wrap { container-type: inline-size; width: 100%; max-width: 960px; margin: 0 auto; padding-bottom: 22px; background: #fff; }
+  @media (min-width: 980px) { .wrap { padding: 24px 24px 22px; box-shadow: 0 2px 24px rgba(0,0,0,.08); } }
+  .credit { text-align: center; font-size: 11px; color: #888; margin: 16px 16px 0; }
+  .copy { font-weight: 400; text-transform: uppercase; text-align: center; color: #2a2a2a; letter-spacing: .02em; }
+
+  /* ---------- Phone: title, then a swipe row of looks ---------- */
+  .stage { display: none; }
+  .logo-h { display: block; width: calc(100% - 48px); max-width: 520px; height: auto; margin: 22px auto 14px; }
+  .row { display: grid; grid-auto-flow: column; grid-auto-columns: 78%; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 16px 6px; scroll-padding: 0 16px; scrollbar-width: none; overscroll-behavior-x: contain; }
+  .row::-webkit-scrollbar { display: none; }
+  .card { scroll-snap-align: start; margin: 0; }
+  .card .ph { aspect-ratio: 3 / 4; overflow: hidden; background: #efefef; }
+  .card img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: var(--x, 66%) center; }
+  .card .copy { font-size: 12.5px; line-height: 1.35; margin: 12px 6px 0; }
+  .note { text-align: center; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #777; margin: 14px 0 0; }
+
+  /* ---------- Wider: the original spot ---------- */
+  @container (min-width: 760px) {
+    .logo-h, .row, .note { display: none; }
+    .stage { display: grid; grid-template-columns: 10.77% 1fr; aspect-ratio: 910 / 700; background: #f5f5f5; }
+    .side { background: url(img/side-logo.jpg) center / 100% 100% no-repeat; }
+    .prod { position: relative; overflow: hidden; background: #f1f1f1; }
+    .look { position: absolute; inset: 0; opacity: 0; transition: opacity .45s ease; }
+    .look.on { opacity: 1; z-index: 1; }
+    .look img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .look .copy { position: absolute; left: 19.1%; top: 26.6%; width: 23%; margin: 0; font-size: 1.75cqi; line-height: 1.13; letter-spacing: .03em; }
+    .col { position: absolute; z-index: 3; top: 11.7%; width: 17.5%; height: 66.6%; background: #fff; padding: 2.86cqi 0; display: flex; flex-direction: column; justify-content: space-between; }
+    .col.l { left: 0; padding-right: 2.2cqi; align-items: flex-start; }
+    .col.r { left: 82.6%; padding-left: 2.2cqi; align-items: flex-end; }
+    .thumb { position: relative; display: block; width: 100%; aspect-ratio: 120 / 140; padding: 0; border: 0; background: #fff; cursor: pointer; }
+    .thumb img { display: block; width: 100%; height: 100%; object-fit: cover; transition: opacity .2s; }
+    .thumb img.on { position: absolute; inset: 0; opacity: 0; }
+    .thumb.active img.on { opacity: 1; }
+    .thumb:focus-visible { outline: 2px solid #000; outline-offset: 2px; }
+    /* black tab with a white chevron, pointing toward the photo */
+    .thumb::after { content: ""; position: absolute; top: 35.7%; width: 15%; height: 26.4%; background: #000; opacity: 0; transition: opacity .2s; }
+    .thumb::before { content: ""; position: absolute; z-index: 1; top: 45.5%; width: 5%; aspect-ratio: 1; border: solid #fff; border-width: 2px 2px 0 0; opacity: 0; transition: opacity .2s; }
+    .col.l .thumb::after { right: 0; } .col.l .thumb::before { right: 5%; transform: rotate(45deg); }
+    .col.r .thumb::after { left: 0; } .col.r .thumb::before { left: 5%; transform: rotate(-135deg); }
+    .thumb.active::after, .thumb.active::before { opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) { .look { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 style="margin:0"><img class="logo-h" src="img/logo-h.jpg" alt="Borrowed from the Boys"></h1>
+  <div class="stage" aria-label="Borrowed from the Boys: seven looks">
+    <div class="side" role="img" aria-label="Borrowed from the Boys"></div>
+    <div class="prod"></div>
+  </div>
+  <div class="row"></div>
+  <p class="note">Swipe for more looks</p>
+  <p class="credit">Creative and Art Direction by Rire Nakpodia. Originally designed and built for Aéropostale.</p>
+</div>
+<script>
+  const looks = [
+    { copy: "Dare to bare in a crop top and sweat shorts that's the perfect mix of athleisure and street style", x: "80%" },
+    { copy: "Balance out a boxy crew neck with a feminine skirt for a look that combines the best of both worlds", x: "62%" },
+    { copy: "An oversized tee and destroyed denim meet their match with some unexpected killer heels", x: "60%" },
+    { copy: "Keep it easy and breezy in a bright tank that shows off your fave retro surf-inspired patterns", x: "52%" },
+    { copy: "Surf's up in a graphic tee and #bestbootyever shorts that create a downtown or shoreside vibe", x: "68%" },
+    { copy: "Go long in board shorts that show off your beach bod (but won't bare all when you hit the water)", x: "62%" },
+    { copy: "What's better than stealing his favorite hoodie? Claiming it for yourself.", x: "66%" }
+  ];
+  const prod = document.querySelector(".prod"), row = document.querySelector(".row");
+
+  // Desktop stage: the looks, then two white thumbnail columns (looks 2–4 left, 5–7 right)
+  prod.innerHTML = looks.map((l, i) =>
+    `<div class="look${i ? "" : " on"}"><img src="img/look${i + 1}.jpg" alt=""><p class="copy">${l.copy}</p></div>`).join("") +
+    [[2, 3, 4], [5, 6, 7]].map((g, c) => `<div class="col ${c ? "r" : "l"}">${g.map(n =>
+      `<button class="thumb" data-i="${n - 1}" aria-label="Look ${n}"><img src="img/thumb${n}.jpg" alt=""><img class="on" src="img/thumb${n}-on.jpg" alt=""></button>`).join("")}</div>`).join("");
+
+  // Phone: one card per look
+  row.innerHTML = looks.map((l, i) =>
+    `<figure class="card"><div class="ph"><img src="img/look${i + 1}.jpg" alt="Look ${i + 1}" style="--x:${l.x}"></div><figcaption class="copy">${l.copy}</figcaption></figure>`).join("");
+
+  const views = [...prod.querySelectorAll(".look")], thumbs = [...prod.querySelectorAll(".thumb")];
+  let cur = 0;
+  function show(i) {
+    cur = i;
+    views.forEach((v, k) => v.classList.toggle("on", k === i));
+    thumbs.forEach(t => t.classList.toggle("active", +t.dataset.i === i));
+  }
+
+  // Cycles through the looks every 3 seconds until someone takes over
+  let timer = setInterval(() => show((cur + 1) % looks.length), 3000);
+  const stop = () => { clearInterval(timer); timer = null; };
+  thumbs.forEach(t => {
+    const go = () => { stop(); show(+t.dataset.i); };
+    t.addEventListener("mouseenter", go);
+    t.addEventListener("click", go);
+    t.addEventListener("focus", go);
+  });
+
+  const report = () => parent !== window && parent.postMessage({ type: "lookbook-height", height: document.documentElement.scrollHeight }, "*");
+  new ResizeObserver(report).observe(document.body);
+</script>
+</body>
+</html>
